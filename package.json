@@ -1,6 +1,6 @@
 {
   "name": "lc-js-common",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "公共库函数。",
   "author": "Linc",
   "main": "src/index.js",
@@ -9,6 +9,7 @@
     "url": "https://github.com/sulirlinc/lc-js-common"
   },
   "dependencies": {
+    "timeunit": "^1.1.1",
     "uuid": "^3.3.3"
   },
   "devDependencies": {

@@ -1,28 +1,29 @@
 const uuidv1 = require('uuid/v1');
+const TimeUnit = require('timeunit')
 const triggers = {}
-const starter = {
-  isStarted: false
-}
+const intervals = {}
 
 class Timer {
-  doTimer() {
-    if (starter.isStarted) {
-      return;
+  doTimer({ intervalsValue = 1000 }) {
+    if (typeof intervalsValue !== "number") {
+      throw "intervalsValue mast be number type."
     }
-    starter.isStarted = true;
-    this.interval = setInterval(() => {
-      starter.isStarted = true;
+    if (!intervals[intervalsValue]) {
+      return
+    }
+    intervals[intervalsValue] = setInterval(() => {
       try {
-        for (const key in triggers) {
-          if (triggers.hasOwnProperty(key)) {
-            const element = triggers[key];
+        const intervalsTrigger = triggers[intervalsValue];
+        for (const key in intervalsTrigger) {
+          if (intervalsTrigger.hasOwnProperty(key)) {
+            const element = intervalsTrigger[key];
             element.trigger()
           }
         }
       } catch (error) {
 
       }
-    }, 1000)
+    }, intervalsValue)
   }
 
   deleteTrigger({ id }) {
@@ -33,12 +34,13 @@ class Timer {
     }
   }
 
-  putTrigger({ trigger, id }) {
+  putTrigger({ trigger, id, timeUnit, interval }) {
     const uid = id || uuidv1()
-    triggers[uid] = {
+    let millis = (timeUnit || TimeUnit.milliseconds).toMillis(interval || 1000);
+    triggers[millis][uid] = {
       trigger, id
     }
-    this.doTimer();
+    this.doTimer({ intervalsValue: millis });
     return uid;
   }
 }

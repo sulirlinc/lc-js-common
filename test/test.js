@@ -1,4 +1,4 @@
-const { L } = require('../src')
+const { L, TimeUnit } = require('../src')
 const { assert } = require('chai');
 describe('公共库测试', () => {
 
@@ -44,6 +44,14 @@ describe('公共库测试', () => {
     assert.equal(L.trim("linc  "), 'linc')
     assert.equal(L.trim("  linc"), 'linc')
     assert.equal(L.trim("  l inc"), 'l inc')
+  })
+
+  it("7.TimeUnit", () => {
+    assert.equal(TimeUnit.days.toMinutes(1), 24 * 60) //1天=24小时*60分钟
+    assert.equal(TimeUnit.days.toMillis(1), 24 * 60 * 60 * 1000) //1天=24*60*60*1000毫秒
+    assert.equal(TimeUnit.seconds.toMillis(1), 1000) //1天=24*60*60*1000毫秒
+    assert.equal(TimeUnit.microseconds.toMillis(1000), 1) //1000毫秒=1微秒
+    assert.equal(TimeUnit.milliseconds.toMillis(1), 1) //1毫秒=1毫秒
   })
 
 })

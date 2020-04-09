@@ -23,6 +23,7 @@ const typeMapNullOrEmpty = {
   }
 }
 const lc = {
+  TimeUnit: require('timeunit'),
   L: {
     timer,
     trim,
