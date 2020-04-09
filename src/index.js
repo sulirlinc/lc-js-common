@@ -32,14 +32,14 @@ const lc = {
       return str === "" ? str : str.replace(regex, callback)
     },
     toDBField: str => {
-      return lc.M.toReplace(str, /[A-Z]/g, (word) => "_" + ((word + "").toLowerCase()))
+      return lc.L.toReplace(str, /[A-Z]/g, (word) => "_" + ((word + "").toLowerCase()))
     },
     toLittleHump: str => {
-      return lc.M.toReplace(str, /\_[a-z]/g, (word) => word.substring(1).toUpperCase())
+      return lc.L.toReplace(str, /\_[a-z]/g, (word) => word.substring(1).toUpperCase())
     },
     toFirstWordUpperCase: str => {
       str = trim(str)
-      return lc.M.toReplace(str, /^[a-z]/, (word) => word.toUpperCase())
+      return lc.L.toReplace(str, /^[a-z]/, (word) => word.toUpperCase())
     },
     isNullOrEmpty: value => {
       if (typeof value == "undefined" || value == null) {
