@@ -8,7 +8,7 @@ class Timer {
     if (typeof intervalsValue !== "number") {
       throw "intervalsValue mast be number type."
     }
-    if (!intervals[intervalsValue]) {
+    if (intervals[intervalsValue]) {
       return
     }
     intervals[intervalsValue] = setInterval(() => {

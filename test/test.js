@@ -18,7 +18,7 @@ describe('公共库测试', () => {
   })
 
   it("3.获取当前秒的时间戳", () => {
-    assert.equal(L.now(), "")
+    assert.equal(L.now(), parseInt(new Date() / 1000))
   })
 
   it("4.数据库字端转小驼峰", () => {
@@ -53,5 +53,17 @@ describe('公共库测试', () => {
     assert.equal(TimeUnit.microseconds.toMillis(1000), 1) //1000毫秒=1微秒
     assert.equal(TimeUnit.milliseconds.toMillis(1), 1) //1毫秒=1毫秒
   })
+
+  it("8.全局间隔执行", (done) => {
+    let i = 1;
+    L.timer.putTrigger({
+      timeUnit: TimeUnit.seconds, interval: 2, trigger: () => {
+        console.log(`当前方法被触发了：${i}次`);
+        if (i++ === 10) {
+          done();
+        }
+      }
+    })
+  }).timeout(100000)
 
 })
