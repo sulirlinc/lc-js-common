@@ -73,6 +73,12 @@ const { assert } = require('chai');
     })
   }).timeout(100000)
 
+  it("9.日期格式化", () => {
+    console.log()
+    const format = 'yyyy-MM-dd hh:mm:ss';
+    assert.equal(L.dateFormatter(new Date(), format), L.now({ format }))
+  })
+
 ```
 
 更多事例与覆盖请查看单元测试``test\test.js``

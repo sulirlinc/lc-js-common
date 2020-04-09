@@ -58,12 +58,18 @@ describe('公共库测试', () => {
     let i = 1;
     L.timer.putTrigger({
       timeUnit: TimeUnit.seconds, interval: 2, trigger: () => {
-        console.log(`当前方法被触发了：${i}次`);
+        console.log(`当前方法被触发了：${ i }次`);
         if (i++ === 10) {
           done();
         }
       }
     })
   }).timeout(100000)
+
+  it("9.日期格式化", () => {
+    console.log()
+    const format = 'yyyy-MM-dd hh:mm:ss';
+    assert.equal(L.dateFormatter(new Date(), format), L.now({ format }))
+  })
 
 })
