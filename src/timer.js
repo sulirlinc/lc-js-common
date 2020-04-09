@@ -27,10 +27,15 @@ class Timer {
   }
 
   deleteTrigger({ id }) {
-    delete triggers[id];
-    if (Object.keys(triggers).length === 0) {
-      clearInterval(this.interval)
-      starter.isStarted = false;
+    for (const intervalsValue in triggers) {
+      if (triggers[intervalsValue][id]) {
+        delete triggers[intervalsValue][id]
+      }
+      if (Object.keys(triggers[intervalsValue]).length === 0) {
+        let interval = intervals[intervalsValue]
+        clearInterval(interval)
+        delete intervals[intervalsValue]
+      }
     }
   }
 
