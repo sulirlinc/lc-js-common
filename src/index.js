@@ -22,7 +22,7 @@ const typeMapNullOrEmpty = {
     return trim(value) === "";
   }
 }
-module.exports = {
+const lc = {
   L: {
     timer,
     trim,
@@ -47,6 +47,6 @@ module.exports = {
       }
       return typeMapNullOrEmpty[typeof value](value)
     }
-
   }
 }
+module.exports = lc
