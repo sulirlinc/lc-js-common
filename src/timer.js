@@ -37,9 +37,10 @@ class Timer {
   putTrigger({ trigger, id, timeUnit, interval }) {
     const uid = id || uuidv1()
     let millis = (timeUnit || TimeUnit.milliseconds).toMillis(interval || 1000);
-    triggers[millis][uid] = {
-      trigger, id
+    if (!triggers[millis]) {
+      triggers[millis] = {}
     }
+    triggers[millis][uid] = { trigger, id }
     this.doTimer({ intervalsValue: millis });
     return uid;
   }
