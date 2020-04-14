@@ -14,9 +14,6 @@ const typeMapNullOrEmpty = {
     }
     return true
   },
-  "array": (value) => {
-    return value.length <= 0
-  },
   "boolean": () => false,
   "number": () => false,
   "function": () => false,
@@ -28,7 +25,17 @@ const typeMapNullOrEmpty = {
 const padLeftZero = (str) => {
   return ('00' + str).substr(str.length)
 }
-
+const arrayDeleteByIndex = (array, index) => {
+  if (!lc.L.array.isArrayType(array) || array.length - 1 < index) {
+    return array
+  }
+  const number = array.length - 1;
+  delete array[index]
+  for (let i = index; i < number; i++) {
+    array[i] = array[i + 1]
+  }
+  return lc.L.array.deleteLast(array)
+}
 /**
  * 日期格式化
  * @param date
@@ -81,6 +88,28 @@ const lc = {
         return true
       }
       return typeMapNullOrEmpty[typeof value](value)
+    },
+    checkIDNumber(value) {
+      return !lc.L.isNullOrEmpty(value) && /^[1-9]\d{5}(18|19|20|(3\d))\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/.test(value);
+    },
+    array: {
+      isArrayType(value) {
+        return value instanceof Array
+      },
+      deleteLast(array) {
+        if (!lc.L.array.isArrayType(array)) {
+          return array
+        }
+        const number = array.length - 1;
+        delete array[number]
+        array.length = number
+        return array
+      },
+      deleteIndex(array, ...indexes) {
+        let i = 0;
+        [ ...new Set(indexes) ].sort().map(index => { arrayDeleteByIndex(array, index - i++) })
+        return array
+      }
     }
   }
 }

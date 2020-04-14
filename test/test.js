@@ -67,9 +67,23 @@ describe('公共库测试', () => {
   }).timeout(100000)
 
   it("9.日期格式化", () => {
-    console.log()
     const format = 'yyyy-MM-dd hh:mm:ss';
     assert.equal(L.dateFormatter(new Date(), format), L.now({ format }))
+  })
+
+  it("10.身份证号校验", () => {
+    assert.equal(L.checkIDNumber("110101199003074530"), true);
+  })
+
+  it("11.删除数组元素", () => {
+    const deleteIndexArray = [ 1, 2, 3, 4, 5, 9, 2, 3, 5, 4, 3 ];
+    //删除下标
+    L.array.deleteIndex(deleteIndexArray, 3, 2, 4, 5, 2)
+    assert.equal(JSON.stringify(deleteIndexArray), JSON.stringify([ 1, 2, 2, 3, 5, 4, 3 ]))
+
+    const deleteLastArray = [ 1, 2, 3 ];
+    L.array.deleteLast(deleteLastArray)
+    assert.equal(JSON.stringify(deleteLastArray), JSON.stringify([ 1, 2 ]))
   })
 
 })
