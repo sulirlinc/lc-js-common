@@ -68,7 +68,8 @@ const lc = {
     dateFormatter,
     timer,
     trim,
-    now: ({ format }) => format ? dateFormatter(new Date(), format) : parseInt((new Date() / 1000) + ''),
+    getCurrentDay: (arg = {}) => arg.format ? dateFormatter(new Date(new Date().toLocaleDateString()), arg.format) : parseInt((new Date(new Date().toLocaleDateString()) / 1000) + ''),
+    now: (arg = {}) => arg.format ? dateFormatter(new Date(), arg.format) : parseInt((new Date() / 1000) + ''),
     toReplace: (str, regex, callback) => {
       str = trim(str)
       return str === "" ? str : str.replace(regex, callback)

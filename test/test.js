@@ -86,4 +86,9 @@ describe('公共库测试', () => {
     assert.equal(JSON.stringify(deleteLastArray), JSON.stringify([ 1, 2 ]))
   })
 
+  it("12.获取当天日期", () => {
+    console.log(L.now())
+    console.log(L.getCurrentDay())
+  })
+
 })

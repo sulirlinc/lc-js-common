@@ -84,15 +84,20 @@ const { assert } = require('chai');
 
   it("11.删除数组元素", () => {
     const deleteIndexArray = [ 1, 2, 3, 4, 5, 9, 2, 3, 5, 4, 3 ];
-    //删除下标
+    //删除下标，分别删除deleteIndexArray[2]、deleteIndexArray[3]、deleteIndexArray[4]、deleteIndexArray[5]。
     L.array.deleteIndex(deleteIndexArray, 3, 2, 4, 5, 2)
     assert.equal(JSON.stringify(deleteIndexArray), JSON.stringify([ 1, 2, 2, 3, 5, 4, 3 ]))
-
+    
     const deleteLastArray = [ 1, 2, 3 ];
+    //删除最后一个元素
     L.array.deleteLast(deleteLastArray)
     assert.equal(JSON.stringify(deleteLastArray), JSON.stringify([ 1, 2 ]))
   })
-  
+
+  it("12.获取当天日期", () => {
+    console.log(L.getCurrentDay()) // 当前时间戳：1586921318653 毫秒 返回数据为：1586880000 秒为单位
+  })
+
 ```
 
 更多事例与覆盖请查看单元测试``test\test.js``
