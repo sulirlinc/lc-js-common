@@ -1,5 +1,5 @@
 const timer = require("./timer")
-
+const uuidv1 = require('uuid/v1');
 const trim = value => {
   if (value == null || typeof value == "undefined") {
     return "";
@@ -44,7 +44,8 @@ const arrayDeleteByIndex = (array, index) => {
  */
 const dateFormatter = (date, format) => {
   if (/(y+)/.test(format)) {
-    format = format.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length))
+    format = format.replace(RegExp.$1,
+        (date.getFullYear() + '').substr(4 - RegExp.$1.length))
   }
   var o = {
     'M+': date.getMonth() + 1,
@@ -56,7 +57,8 @@ const dateFormatter = (date, format) => {
   for (var k in o) {
     if (new RegExp(`(${ k })`).test(format)) {
       var str = o[k] + ''
-      format = format.replace(RegExp.$1, (RegExp.$1.length === 1) ? str : padLeftZero(str))
+      format = format.replace(RegExp.$1,
+          (RegExp.$1.length === 1) ? str : padLeftZero(str))
     }
   }
   return format
@@ -68,17 +70,25 @@ const lc = {
     dateFormatter,
     timer,
     trim,
-    getCurrentDay: (arg = {}) => arg.format ? dateFormatter(new Date(new Date().toLocaleDateString()), arg.format) : parseInt((new Date(new Date().toLocaleDateString()) / 1000) + ''),
-    now: (arg = {}) => arg.format ? dateFormatter(new Date(), arg.format) : parseInt((new Date() / 1000) + ''),
+    getCurrentDay: (arg = {}) => arg.format ? dateFormatter(
+        new Date(new Date().toLocaleDateString()), arg.format) : parseInt(
+        (new Date(new Date().toLocaleDateString()) / 1000) + ''),
+    now: (arg = {}) => arg.format ? dateFormatter(new Date(), arg.format)
+        : parseInt((new Date() / 1000) + ''),
     toReplace: (str, regex, callback) => {
       str = trim(str)
       return str === "" ? str : str.replace(regex, callback)
     },
     toDBField: str => {
-      return lc.L.toReplace(str, /[A-Z]/g, (word) => "_" + ((word + "").toLowerCase()))
+      return lc.L.toReplace(str, /[A-Z]/g,
+          (word) => "_" + ((word + "").toLowerCase()))
+    },
+    uuid: () => {
+      return uuidv1()
     },
     toLittleHump: str => {
-      return lc.L.toReplace(str, /\_[a-z]/g, (word) => word.substring(1).toUpperCase())
+      return lc.L.toReplace(str, /\_[a-z]/g,
+          (word) => word.substring(1).toUpperCase())
     },
     toFirstWordUpperCase: str => {
       str = trim(str)
@@ -91,7 +101,9 @@ const lc = {
       return typeMapNullOrEmpty[typeof value](value)
     },
     checkIDNumber(value) {
-      return !lc.L.isNullOrEmpty(value) && /^[1-9]\d{5}(18|19|20|(3\d))\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/.test(value);
+      return !lc.L.isNullOrEmpty(value)
+          && /^[1-9]\d{5}(18|19|20|(3\d))\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/.test(
+              value);
     },
     array: {
       isArrayType(value) {
@@ -108,7 +120,9 @@ const lc = {
       },
       deleteIndex(array, ...indexes) {
         let i = 0;
-        [ ...new Set(indexes) ].sort().map(index => { arrayDeleteByIndex(array, index - i++) })
+        [ ...new Set(indexes) ].sort().map(index => {
+          arrayDeleteByIndex(array, index - i++)
+        })
         return array
       }
     }
