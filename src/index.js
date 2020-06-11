@@ -105,6 +105,11 @@ const lc = {
           && /^[1-9]\d{5}(18|19|20|(3\d))\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/.test(
               value);
     },
+    range(size, callback) {
+      if (/^[1-9]\d{0,9}$/.test(size) && typeof callback === 'function') {
+        [ ...Array(size).keys() ].map(callback);
+      }
+    },
     array: {
       isArrayType(value) {
         return value instanceof Array

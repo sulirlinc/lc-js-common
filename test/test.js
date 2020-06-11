@@ -32,7 +32,8 @@ describe('公共库测试', () => {
     assert.equal(L.isNullOrEmpty(), true)
     assert.equal(L.isNullOrEmpty(null), true)
     assert.equal(L.isNullOrEmpty(undefined), true)
-    assert.equal(L.isNullOrEmpty(() => {}), false)
+    assert.equal(L.isNullOrEmpty(() => {
+    }), false)
     assert.equal(L.isNullOrEmpty([]), true)
     assert.equal(L.isNullOrEmpty({}), true)
     assert.equal(L.isNullOrEmpty(123), false)
@@ -80,7 +81,6 @@ describe('公共库测试', () => {
     //删除下标
     L.array.deleteIndex(deleteIndexArray, 3, 2, 4, 5, 2)
     assert.equal(JSON.stringify(deleteIndexArray), JSON.stringify([ 1, 2, 2, 3, 5, 4, 3 ]))
-
     const deleteLastArray = [ 1, 2, 3 ];
     L.array.deleteLast(deleteLastArray)
     assert.equal(JSON.stringify(deleteLastArray), JSON.stringify([ 1, 2 ]))
@@ -90,5 +90,9 @@ describe('公共库测试', () => {
     console.log(L.now())
     console.log(L.getCurrentDay())
   })
-
+  it("13.range", () => {
+    L.range(1001, (i) => {
+      console.log(i);
+    });
+  })
 })
