@@ -39,13 +39,16 @@ class Timer {
     }
   }
 
-  putTrigger({ trigger, id, timeUnit, interval }) {
+  putTrigger({ trigger, id, timeUnit, interval, priorityExecution }) {
     const uid = id || uuidv1()
     let millis = (timeUnit || TimeUnit.milliseconds).toMillis(interval || 1000);
     if (!triggers[millis]) {
       triggers[millis] = {}
     }
     triggers[millis][uid] = { trigger, id }
+    if (trigger && priorityExecution) {
+      trigger();
+    }
     this.doTimer({ intervalsValue: millis });
     return uid;
   }

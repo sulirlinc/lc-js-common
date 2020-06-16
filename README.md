@@ -63,7 +63,9 @@ const { assert } = require('chai');
   
   it("8.全局间隔执行", (done) => {
     let i = 1;
+    const priorityExecution = true; //put之前先执行一次。
     L.timer.putTrigger({
+      priorityExecution,
       timeUnit: TimeUnit.seconds, interval: 2, trigger: () => {
         console.log(`当前方法被触发了：${i}次`);
         if (i++ === 10) {
@@ -98,6 +100,11 @@ const { assert } = require('chai');
     console.log(L.getCurrentDay()) // 当前时间戳：1586921318653 毫秒 返回数据为：1586880000 秒为单位
   })
 
+  it("13.range", () => {
+    L.range(1001, (i) => {
+      console.log(i);
+    });
+  })
 ```
 
 更多事例与覆盖请查看单元测试``test\test.js``

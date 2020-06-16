@@ -57,14 +57,19 @@ describe('公共库测试', () => {
 
   it("8.全局间隔执行", (done) => {
     let i = 1;
+    const id = 1234;
+    const priorityExecution = true; //put之前先执行一次。
     L.timer.putTrigger({
+      id,
+      priorityExecution,
       timeUnit: TimeUnit.seconds, interval: 2, trigger: () => {
         console.log(`当前方法被触发了：${ i }次`);
         if (i++ === 10) {
           done();
         }
       }
-    })
+    });
+    L.timer.deleteTrigger({ id });
   }).timeout(100000)
 
   it("9.日期格式化", () => {
@@ -80,7 +85,8 @@ describe('公共库测试', () => {
     const deleteIndexArray = [ 1, 2, 3, 4, 5, 9, 2, 3, 5, 4, 3 ];
     //删除下标
     L.array.deleteIndex(deleteIndexArray, 3, 2, 4, 5, 2)
-    assert.equal(JSON.stringify(deleteIndexArray), JSON.stringify([ 1, 2, 2, 3, 5, 4, 3 ]))
+    assert.equal(JSON.stringify(deleteIndexArray),
+        JSON.stringify([ 1, 2, 2, 3, 5, 4, 3 ]))
     const deleteLastArray = [ 1, 2, 3 ];
     L.array.deleteLast(deleteLastArray)
     assert.equal(JSON.stringify(deleteLastArray), JSON.stringify([ 1, 2 ]))
