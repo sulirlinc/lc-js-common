@@ -1,6 +1,6 @@
 {
   "name": "lc-js-common",
-  "version": "1.0.14",
+  "version": "1.0.15",
   "description": "公共库函数。",
   "author": "Linc",
   "main": "src/index.js",
@@ -13,6 +13,7 @@
     "uuid"
   ],
   "dependencies": {
+    "jsrsasign": "^8.0.24",
     "timeunit": "^1.1.1",
     "uuid": "^3.3.3"
   },

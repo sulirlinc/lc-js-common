@@ -101,4 +101,19 @@ describe('公共库测试', () => {
       console.log(i);
     });
   })
+  it("14.获取当前日期的之前N天", () => {
+    console.log(L.getCurrentDay()-(TimeUnit.days.toSeconds(60)))
+  })
+  it("15.md5", () => {
+    console.log(L.md5(123456))
+  })
+  it("16.hash512", () => {
+    console.log(L.hash512("666", 123456))
+  })
+  it("17.base64", () => {
+    const base64 = L.base64;
+    const message = base64.encrypt(1);
+    console.log(message)
+    console.log(base64.decrypt(message))
+  })
 })

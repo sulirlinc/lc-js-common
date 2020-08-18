@@ -1,5 +1,7 @@
 const timer = require("./timer")
 const uuidv1 = require('uuid/v1');
+const jsrsasign = require('jsrsasign');
+const enc = jsrsasign.CryptoJS.enc
 const trim = value => {
   if (value == null || typeof value == "undefined") {
     return "";
@@ -110,27 +112,38 @@ const lc = {
         [ ...Array(size).keys() ].map(callback);
       }
     },
-    array: {
-      isArrayType(value) {
-        return value instanceof Array
-      },
-      deleteLast(array) {
-        if (!lc.L.array.isArrayType(array)) {
-          return array
-        }
-        const number = array.length - 1;
-        delete array[number]
-        array.length = number
-        return array
-      },
-      deleteIndex(array, ...indexes) {
-        let i = 0;
-        [ ...new Set(indexes) ].sort().map(index => {
-          arrayDeleteByIndex(array, index - i++)
-        })
+    md5(value) {
+      return jsrsasign.CryptoJS.MD5(value.toString()).toString().toLowerCase();
+    },
+    hash512(key, value) {
+      return jsrsasign.CryptoJS.HmacSHA512(key, value.toString()).toString();
+    },
+    base64: {
+      decrypt: (value) => enc.Base64.parse(value).toString(enc.Utf8),
+      encrypt: (value) => enc.Base64.stringify(enc.Utf8.parse(value))
+    }
+  },
+  array: {
+    isArrayType(value) {
+      return value instanceof Array
+    },
+    deleteLast(array) {
+      if (!lc.L.array.isArrayType(array)) {
         return array
       }
+      const number = array.length - 1;
+      delete array[number]
+      array.length = number
+      return array
+    },
+    deleteIndex(array, ...indexes) {
+      let i = 0;
+      [ ...new Set(indexes) ].sort().map(index => {
+        arrayDeleteByIndex(array, index - i++)
+      })
+      return array
     }
   }
 }
+
 module.exports = lc
