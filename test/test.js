@@ -1,4 +1,4 @@
-const { L, TimeUnit } = require('../src')
+const { L, TimeUnit, jsonWebToken } = require('../src')
 const { assert } = require('chai');
 describe('公共库测试', () => {
 
@@ -101,19 +101,35 @@ describe('公共库测试', () => {
       console.log(i);
     });
   })
+
   it("14.获取当前日期的之前N天", () => {
-    console.log(L.getCurrentDay()-(TimeUnit.days.toSeconds(60)))
+    console.log(L.getCurrentDay() - (TimeUnit.days.toSeconds(60)))
   })
+
   it("15.md5", () => {
     console.log(L.md5(123456))
   })
+
   it("16.hash512", () => {
     console.log(L.hash512("666", 123456))
   })
+
   it("17.base64", () => {
     const base64 = L.base64;
     const message = base64.encrypt(1);
     console.log(message)
     console.log(base64.decrypt(message))
+  })
+
+  it("18.uuid", () => {
+    console.log(L.uuid())
+  })
+
+  it("19.jwt",async () => {
+    const jwt = jsonWebToken("123456");
+    const authorization = await jwt.sign(
+        { userName: 'chong', roles: [ 'admin', 'manager' ] }, '2day');
+    console.log(authorization)
+    console.log(await jwt.getUserInfo({ authorization }));
   })
 })

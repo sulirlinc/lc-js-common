@@ -96,11 +96,13 @@ const lc = {
       str = trim(str)
       return lc.L.toReplace(str, /^[a-z]/, (word) => word.toUpperCase())
     },
-    isNullOrEmpty: value => {
+    isNull: value => {
       if (typeof value == "undefined" || value == null) {
         return true
       }
-      return typeMapNullOrEmpty[typeof value](value)
+    },
+    isNullOrEmpty: value => {
+      return lc.L.isNull(value) || typeMapNullOrEmpty[typeof value](value)
     },
     checkIDNumber(value) {
       return !lc.L.isNullOrEmpty(value)
@@ -143,6 +145,29 @@ const lc = {
       })
       return array
     }
+  },
+  jsonWebToken: (key) => {
+    const jwt = require('jsonwebtoken');
+    const ts = {
+      sign(payload, { expiresIn = '1day', ...options}) {
+        return new Promise(
+            (resolve, reject) => jwt.sign(payload, key, { expiresIn, ...options },
+                (err, token) => err ? reject() : resolve(token)));
+      },
+      getUserInfo({ authorization, check = true }) {
+        return new Promise((resolve, reject) => {
+          let userInfo = jwt.decode(authorization);
+          if (!check) {
+            resolve(userInfo)
+            return
+          }
+          jwt.verify(authorization, key, (err, authData) => err ? reject(new Error(`无效的授权码。\n${ err.message || '' }\n${ err.stack }`)) :
+              resolve(authData));
+
+        })
+      }
+    }
+    return ts
   }
 }
 

@@ -6,8 +6,9 @@
 例如：
 
 ```javascript
-import { L, TimeUnit } from 'lc-js-common';
+import { L, TimeUnit,J } from 'lc-js-common';
 const { assert } = require('chai');
+describe('公共库测试', () => {
 
   it("1.驼峰命名转换数据库命名", () => {
     assert.equal(L.toDBField("tMyTable"), "t_my_table")
@@ -39,7 +40,8 @@ const { assert } = require('chai');
     assert.equal(L.isNullOrEmpty(), true)
     assert.equal(L.isNullOrEmpty(null), true)
     assert.equal(L.isNullOrEmpty(undefined), true)
-    assert.equal(L.isNullOrEmpty(() => {}), false)
+    assert.equal(L.isNullOrEmpty(() => {
+    }), false)
     assert.equal(L.isNullOrEmpty([]), true)
     assert.equal(L.isNullOrEmpty({}), true)
     assert.equal(L.isNullOrEmpty(123), false)
@@ -60,19 +62,22 @@ const { assert } = require('chai');
     assert.equal(TimeUnit.microseconds.toMillis(1000), 1) //1000毫秒=1微秒
     assert.equal(TimeUnit.milliseconds.toMillis(1), 1) //1毫秒=1毫秒
   })
-  
+
   it("8.全局间隔执行", (done) => {
     let i = 1;
+    const id = 1234;
     const priorityExecution = true; //put之前先执行一次。
     L.timer.putTrigger({
+      id,
       priorityExecution,
       timeUnit: TimeUnit.seconds, interval: 2, trigger: () => {
-        console.log(`当前方法被触发了：${i}次`);
+        console.log(`当前方法被触发了：${ i }次`);
         if (i++ === 10) {
           done();
         }
       }
-    })
+    });
+    L.timer.deleteTrigger({ id });
   }).timeout(100000)
 
   it("9.日期格式化", () => {
@@ -86,25 +91,25 @@ const { assert } = require('chai');
 
   it("11.删除数组元素", () => {
     const deleteIndexArray = [ 1, 2, 3, 4, 5, 9, 2, 3, 5, 4, 3 ];
-    //删除下标，分别删除deleteIndexArray[2]、deleteIndexArray[3]、deleteIndexArray[4]、deleteIndexArray[5]。
+    //删除下标
     L.array.deleteIndex(deleteIndexArray, 3, 2, 4, 5, 2)
-    assert.equal(JSON.stringify(deleteIndexArray), JSON.stringify([ 1, 2, 2, 3, 5, 4, 3 ]))
-    
+    assert.equal(JSON.stringify(deleteIndexArray),
+        JSON.stringify([ 1, 2, 2, 3, 5, 4, 3 ]))
     const deleteLastArray = [ 1, 2, 3 ];
-    //删除最后一个元素
     L.array.deleteLast(deleteLastArray)
     assert.equal(JSON.stringify(deleteLastArray), JSON.stringify([ 1, 2 ]))
   })
 
   it("12.获取当天日期", () => {
-    console.log(L.getCurrentDay()) // 当前时间戳：1586921318653 毫秒 返回数据为：1586880000 秒为单位
+    console.log(L.now())
+    console.log(L.getCurrentDay())
   })
-
   it("13.range", () => {
     L.range(1001, (i) => {
       console.log(i);
     });
   })
+
   it("14.获取当前日期的之前N天", () => {
     console.log(L.getCurrentDay()-(TimeUnit.days.toSeconds(60)))
   })
@@ -123,6 +128,36 @@ const { assert } = require('chai');
     console.log(message)
     console.log(base64.decrypt(message))
   })
+  it("18.uuid", () => {
+    console.log(L.uuid())
+  })
+
+```
+jwt = jsonWebToken(key)
+jwt.sign(payload, secretOrPrivateKey
+`options`:
+
+* `algorithm` (default: `HS256`)
+* `expiresIn`: expressed in seconds or a string describing a time span [zeit/ms](https://github.com/zeit/ms). 
+  > Eg: `60`, `"2 days"`, `"10h"`, `"7d"`. A numeric value is interpreted as a seconds count. If you use a string be sure you provide the time units (days, hours, etc), otherwise milliseconds unit is used by default (`"120"` is equal to `"120ms"`).
+* `notBefore`: expressed in seconds or a string describing a time span [zeit/ms](https://github.com/zeit/ms). 
+  > Eg: `60`, `"2 days"`, `"10h"`, `"7d"`. A numeric value is interpreted as a seconds count. If you use a string be sure you provide the time units (days, hours, etc), otherwise milliseconds unit is used by default (`"120"` is equal to `"120ms"`).
+* `audience`
+* `issuer`
+* `jwtid`
+* `subject`
+* `noTimestamp`
+* `header`
+* `keyid`
+* `mutatePayload`: if true, the sign function will modify the payload object directly. This is useful if you need a raw reference to the payload after claims
+ ```javascript
+  it("19.jwt",async () => {
+      const jwt = jsonWebToken("123456");
+      const authorization = await jwt.sign(
+          { userName: 'chong', roles: [ 'admin', 'manager' ] }, { expiresIn: '2day'});//https://github.com/vercel/ms
+      console.log(authorization)
+      console.log(await jwt.getUserInfo({ authorization }));
+    })
 ```
 
 更多事例与覆盖请查看单元测试``test\test.js``
