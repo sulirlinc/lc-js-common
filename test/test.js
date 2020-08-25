@@ -125,10 +125,11 @@ describe('公共库测试', () => {
     console.log(L.uuid())
   })
 
-  it("19.jwt",async () => {
+  it("19.jwt", async () => {
     const jwt = jsonWebToken("123456");
     const authorization = await jwt.sign(
-        { userName: 'chong', roles: [ 'admin', 'manager' ] }, '2day');
+        { userName: 'chong', roles: [ 'admin', 'manager' ] },
+        { expiresIn: '2day' });
     console.log(authorization)
     console.log(await jwt.getUserInfo({ authorization }));
   })

@@ -154,7 +154,7 @@ jwt.sign(payload, secretOrPrivateKey
   it("19.jwt",async () => {
       const jwt = jsonWebToken("123456");
       const authorization = await jwt.sign(
-          { userName: 'chong', roles: [ 'admin', 'manager' ] }, { expiresIn: '2day'});//https://github.com/vercel/ms
+          { userName: 'chong', roles: [ 'admin', 'manager' ] }, { expiresIn: '2day' });//https://github.com/vercel/ms
       console.log(authorization)
       console.log(await jwt.getUserInfo({ authorization }));
     })

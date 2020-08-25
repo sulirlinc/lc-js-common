@@ -158,12 +158,10 @@ const lc = {
         return new Promise((resolve, reject) => {
           let userInfo = jwt.decode(authorization);
           if (!check) {
-            resolve(userInfo)
+            resolve(userInfo);
             return
           }
-          jwt.verify(authorization, key, (err, authData) => err ? reject(new Error(`无效的授权码。\n${ err.message || '' }\n${ err.stack }`)) :
-              resolve(authData));
-
+          jwt.verify(authorization, key, (err, authData) => err ? reject(new Error(`无效的授权码。\n${ err.message || '' }\n${ err.stack }`)) : resolve(authData));
         })
       }
     }
