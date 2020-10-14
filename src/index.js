@@ -189,7 +189,7 @@ const lc = {
         if (typeof (value) === 'number') {
           return ((value || 0) / 10.0 / 10.0).toFixed(2)
         } else if (typeof (value) === 'string') {
-          return parseInt(value || 0) * 10 * 10
+          return parseFloat(value || 0) * 10 * 10
         }
       } catch (e) {
       }
