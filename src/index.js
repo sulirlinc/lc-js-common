@@ -1,14 +1,32 @@
 const timer = require("./timer")
-const uuidv1 = require('uuid/v1');
-const jsrsasign = require('jsrsasign');
-const enc = jsrsasign.CryptoJS.enc
+const uuidv1 = require('uuid/v1')
+const jsrsasign = require('jsrsasign')
+const CryptoJS = jsrsasign.CryptoJS
+const enc = CryptoJS.enc
 const trim = value => {
   if (value == null || typeof value == "undefined") {
     return "";
   }
   return value.replace(/(^\s*)|(\s*$)/g, "");
 }
+function buildRandomCode(length, characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789") {
+  let result = "";
+  const charactersLength = characters.length;
+  for (let i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
+}
 
+function buildRandomNumber(length) {
+  let result = "";
+  const characters = "0123456789";
+  const charactersLength = characters.length;
+  for (let i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
+}
 const typeMapNullOrEmpty = {
   "object": (value) => {
     for (const key in value) {
@@ -72,6 +90,12 @@ const lc = {
     dateFormatter,
     timer,
     trim,
+    randomCode(length){
+      return buildRandomCode(length)
+    },
+    randomNumber(length){
+      return buildRandomNumber(length)
+    },
     getCurrentDay: (arg = {}) => arg.format ? dateFormatter(
         new Date(new Date().toLocaleDateString()), arg.format) : parseInt(
         (new Date(new Date().toLocaleDateString()) / 1000) + ''),
@@ -115,14 +139,61 @@ const lc = {
       }
     },
     md5(value) {
-      return jsrsasign.CryptoJS.MD5(value.toString()).toString().toLowerCase();
+      return CryptoJS.MD5(value.toString()).toString().toLowerCase();
     },
     hash512(key, value) {
-      return jsrsasign.CryptoJS.HmacSHA512(key, value.toString()).toString();
+      return CryptoJS.HmacSHA512(key, value.toString()).toString();
+    },
+    aes:{
+      iv: "M9cId0H1Iq9TL5G9",
+      encrypt(text, secKey) {
+        const key = enc.Utf8.parse(secKey);
+        const iv = enc.Utf8.parse(lc.L.aes.iv);
+        return CryptoJS.AES.encrypt(text,secKey);/*
+        return CryptoJS.AES.encrypt(enc.Utf8.parse(text), key, {
+          iv,
+          mode: CryptoJS.mode.CBC,
+          padding: CryptoJS.pad.Pkcs7
+        }).toString()*/
+      },
+      decrypt(text, secKey) {
+        const key = enc.Utf8.parse(secKey);
+        const iv = enc.Utf8.parse(lc.L.aes.iv);
+
+        return CryptoJS.AES.decrypt(text,secKey);
+       /* return CryptoJS.AES.decrypt(enc.Utf8.parse(text), key, {
+          iv,
+          mode: CryptoJS.mode.CBC,
+          padding: CryptoJS.pad.Pkcs7
+        }).toString(enc.Utf8)*/
+      }
     },
     base64: {
       decrypt: (value) => enc.Base64.parse(value).toString(enc.Utf8),
       encrypt: (value) => enc.Base64.stringify(enc.Utf8.parse(value))
+    },
+    mapper(obj) {
+      return (data = {}, target) => {
+        //const { array = [], map, enums, values } = data
+        obj[target] = (name) => (data)[name || 'array']
+      }
+    },
+    /**
+     * 元转为分，分转为元。
+     * String为元->Integer为分
+     * @param value
+     * @returns {number | string}
+     */
+    convertAmount(value) {
+      try {
+        if (typeof (value) === 'number') {
+          return ((value || 0) / 10.0 / 10.0).toFixed(2)
+        } else if (typeof (value) === 'string') {
+          return parseInt(value || 0) * 10 * 10
+        }
+      } catch (e) {
+      }
+      return 0
     }
   },
   array: {
@@ -149,9 +220,10 @@ const lc = {
   jsonWebToken: (key) => {
     const jwt = require('jsonwebtoken');
     const ts = {
-      sign(payload, { expiresIn = '1day', ...options}) {
+      sign(payload, options) {
         return new Promise(
-            (resolve, reject) => jwt.sign(payload, key, { expiresIn, ...options },
+            (resolve, reject) => jwt.sign(payload, key,
+                options,
                 (err, token) => err ? reject() : resolve(token)));
       },
       getUserInfo({ authorization, check = true }) {
@@ -161,7 +233,9 @@ const lc = {
             resolve(userInfo);
             return
           }
-          jwt.verify(authorization, key, (err, authData) => err ? reject(new Error(`无效的授权码。\n${ err.message || '' }\n${ err.stack }`)) : resolve(authData));
+          jwt.verify(authorization, key, (err, authData) => err ? reject(
+              new Error(`无效的授权码。\n${ err.message || '' }\n${ err.stack }`))
+              : resolve(authData));
         })
       }
     }

@@ -48,6 +48,7 @@ describe('公共库测试', () => {
   })
 
   it("7.TimeUnit", () => {
+    assert.equal(TimeUnit.days.toSeconds(1), 24 * 60 * 60) //1天=24小时*60分钟*60秒
     assert.equal(TimeUnit.days.toMinutes(1), 24 * 60) //1天=24小时*60分钟
     assert.equal(TimeUnit.days.toMillis(1), 24 * 60 * 60 * 1000) //1天=24*60*60*1000毫秒
     assert.equal(TimeUnit.seconds.toMillis(1), 1000) //1天=24*60*60*1000毫秒
@@ -132,5 +133,28 @@ describe('公共库测试', () => {
         { expiresIn: '2day' });
     console.log(authorization)
     console.log(await jwt.getUserInfo({ authorization }));
+  })
+  it("20.mapper", () => {
+    const a = {}
+    L.mapper(a)({ array: [ 1, 2, 3, 4 ] }, 't')
+    console.log(a.t())
+  })
+  it("21.元转换为分，分转为元", () => {
+    assert.equal(L.convertAmount(1), "0.01")
+    assert.equal(L.convertAmount("0.01"), 1)
+  })
+  it("22.随机串", () => {
+    console.log(L.randomCode(16))
+  })
+  it("23.随机数", () => {
+    console.log(L.randomNumber(16))
+  })
+  it("24.AES加密", () => {
+    const key = L.randomCode(6);
+    const { encrypt, decrypt } = L.aes;
+    const data = encrypt('absdafadfasdfcdefg', key);
+    console.log(data)
+    const data1 = decrypt(data, key);
+    console.log(data1)
   })
 })
