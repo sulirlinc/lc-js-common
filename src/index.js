@@ -1,4 +1,6 @@
-const timer = require("./timer")
+const { format, unformat } = require('currency-formatter')
+
+const timer = require('./timer')
 const uuidv1 = require('uuid/v1')
 const jsrsasign = require('jsrsasign')
 const CryptoJS = jsrsasign.CryptoJS
@@ -187,9 +189,13 @@ const lc = {
     convertAmount(value) {
       try {
         if (typeof (value) === 'number') {
-          return ((value || 0) / 10.0 / 10.0).toFixed(2)
+          return format(((value || 0) / 10.0 / 10.0), {
+            code: 'USD',
+            symbol: ''
+          })
+      //    return ((value || 0) / 10.0 / 10.0).toFixed(2)
         } else if (typeof (value) === 'string') {
-          return parseFloat(value || 0) * 10 * 10
+          return parseFloat((value || "0").replace(/,/g,'')) * 10 * 10
         }
       } catch (e) {
       }

@@ -140,8 +140,12 @@ describe('公共库测试', () => {
     console.log(a.t())
   })
   it("21.元转换为分，分转为元", () => {
-    assert.equal(L.convertAmount(1), "0.01")
-    assert.equal(L.convertAmount("0.01"), 1)
+    const fenToYuan = L.convertAmount(100000001)
+    console.log(fenToYuan)
+    assert.equal(fenToYuan, "1,000,000.01")
+    const yuanToFen = L.convertAmount("1,000,000.01")
+    console.log(yuanToFen)
+    assert.equal(yuanToFen, 100000001)
   })
   it("22.随机串", () => {
     console.log(L.randomCode(16))
