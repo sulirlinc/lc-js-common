@@ -1,5 +1,5 @@
 const { format, unformat } = require('currency-formatter')
-
+const crypto = require('crypto')
 const timer = require('./timer')
 const uuidv1 = require('uuid/v1')
 const jsrsasign = require('jsrsasign')
@@ -11,7 +11,9 @@ const trim = value => {
   }
   return value.replace(/(^\s*)|(\s*$)/g, "");
 }
-function buildRandomCode(length, characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789") {
+
+function buildRandomCode(length,
+    characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789") {
   let result = "";
   const charactersLength = characters.length;
   for (let i = 0; i < length; i++) {
@@ -29,6 +31,7 @@ function buildRandomNumber(length) {
   }
   return result;
 }
+
 const typeMapNullOrEmpty = {
   "object": (value) => {
     for (const key in value) {
@@ -92,10 +95,10 @@ const lc = {
     dateFormatter,
     timer,
     trim,
-    randomCode(length){
+    randomCode(length) {
       return buildRandomCode(length)
     },
-    randomNumber(length){
+    randomNumber(length) {
       return buildRandomNumber(length)
     },
     getCurrentDay: (arg = {}) => arg.format ? dateFormatter(
@@ -146,28 +149,25 @@ const lc = {
     hash512(key, value) {
       return CryptoJS.HmacSHA512(key, value.toString()).toString();
     },
-    aes:{
-      iv: "M9cId0H1Iq9TL5G9",
-      encrypt(text, secKey) {
-        const key = enc.Utf8.parse(secKey);
-        const iv = enc.Utf8.parse(lc.L.aes.iv);
-        return CryptoJS.AES.encrypt(text,secKey);/*
-        return CryptoJS.AES.encrypt(enc.Utf8.parse(text), key, {
-          iv,
-          mode: CryptoJS.mode.CBC,
-          padding: CryptoJS.pad.Pkcs7
-        }).toString()*/
+    aes: {
+      cipherEncoding: 'base64',
+      clearEncoding: 'utf8',
+      aes128Ecb: 'aes-128-ecb',
+      encrypt({ data, key, iv = '' }) {
+        const cipherChunks = [];
+        const cipher = crypto.createCipheriv(lc.L.aes.aes128Ecb, key, iv);
+        cipher.setAutoPadding(true);
+        cipherChunks.push(cipher.update(data, 'utf8', lc.L.aes.cipherEncoding));
+        cipherChunks.push(cipher.final(lc.L.aes.cipherEncoding));
+        return cipherChunks.join('');
       },
-      decrypt(text, secKey) {
-        const key = enc.Utf8.parse(secKey);
-        const iv = enc.Utf8.parse(lc.L.aes.iv);
-
-        return CryptoJS.AES.decrypt(text,secKey);
-       /* return CryptoJS.AES.decrypt(enc.Utf8.parse(text), key, {
-          iv,
-          mode: CryptoJS.mode.CBC,
-          padding: CryptoJS.pad.Pkcs7
-        }).toString(enc.Utf8)*/
+      decrypt({ data, key, iv = '' }) {
+        const cipherChunks = [];
+        const decipher = crypto.createDecipheriv(lc.L.aes.aes128Ecb, key, iv);
+        decipher.setAutoPadding(true);
+        cipherChunks.push(decipher.update(data, lc.L.aes.cipherEncoding, lc.L.aes.clearEncoding));
+        cipherChunks.push(decipher.final(lc.L.aes.clearEncoding));
+        return cipherChunks.join('')
       }
     },
     base64: {
@@ -193,9 +193,9 @@ const lc = {
             code: 'USD',
             symbol: ''
           })
-      //    return ((value || 0) / 10.0 / 10.0).toFixed(2)
+          //    return ((value || 0) / 10.0 / 10.0).toFixed(2)
         } else if (typeof (value) === 'string') {
-          return parseFloat((value || "0").replace(/,/g,'')) * 10 * 10
+          return parseFloat((value || "0").replace(/,/g, '')) * 10 * 10
         }
       } catch (e) {
       }

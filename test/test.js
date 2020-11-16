@@ -154,11 +154,11 @@ describe('公共库测试', () => {
     console.log(L.randomNumber(16))
   })
   it("24.AES加密", () => {
-    const key = L.randomCode(6);
+    const key = L.randomCode(16);
     const { encrypt, decrypt } = L.aes;
-    const data = encrypt('absdafadfasdfcdefg', key);
+    const data = encrypt({ data: 'absdafadfasdfcdefg', key });
     console.log(data)
-    const data1 = decrypt(data, key);
+    const data1 = decrypt({ data, key });
     console.log(data1)
   })
 })
