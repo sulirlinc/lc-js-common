@@ -161,4 +161,11 @@ describe('公共库测试', () => {
     const data1 = decrypt({ data, key });
     console.log(data1)
   })
+  it("25.替换末尾为0的方法", () => {
+    assert.equal(L.replaceNumWith0AtEnd("0.000128800",2), "0.0001288")
+    assert.equal(L.replaceNumWith0AtEnd("0.8000",2), "0.80")
+    assert.equal(L.replaceNumWith0AtEnd("0.80000",3), "0.800")
+  })
+
+
 })
