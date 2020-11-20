@@ -105,8 +105,10 @@ const lc = {
      * 替换末尾为0的方法，
      * 如：0.01000可替换成0.01
      */
-    replaceNumWith0AtEnd(num, keepDecimalPlaces) {
-      return `${ num }`.replace(new RegExp(`(\\d+\\.\\d{${keepDecimalPlaces}}(\\d*[1-9])*)(0*)`), '$1');
+    replaceNumWith0AtEnd(num, keepDecimalPlaces = 2) {
+      return `${ num }`.replace(
+          new RegExp(`(\\d+\\.\\d{${ keepDecimalPlaces }}(\\d*[1-9])*)(0*)`),
+          '$1');
     },
     getCurrentDay: (arg = {}) => arg.format ? dateFormatter(
         new Date(new Date().toLocaleDateString()), arg.format) : parseInt(
@@ -172,7 +174,8 @@ const lc = {
         const cipherChunks = [];
         const decipher = crypto.createDecipheriv(lc.L.aes.aes128Ecb, key, iv);
         decipher.setAutoPadding(true);
-        cipherChunks.push(decipher.update(data, lc.L.aes.cipherEncoding, lc.L.aes.clearEncoding));
+        cipherChunks.push(decipher.update(data, lc.L.aes.cipherEncoding,
+            lc.L.aes.clearEncoding));
         cipherChunks.push(decipher.final(lc.L.aes.clearEncoding));
         return cipherChunks.join('')
       }

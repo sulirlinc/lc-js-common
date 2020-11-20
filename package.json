@@ -1,6 +1,6 @@
 {
   "name": "lc-js-common",
-  "version": "1.0.34",
+  "version": "1.0.35",
   "description": "公共库函数。",
   "author": "Linc",
   "main": "src/index.js",
