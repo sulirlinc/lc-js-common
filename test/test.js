@@ -169,6 +169,4 @@ describe('公共库测试', () => {
     assert.equal(L.replaceNumWith0AtEnd("12340", 3, true), "12,340.000")
     assert.equal(L.replaceNumWith0AtEndEx({ num: "12340", thousandCharacter: true }),"12,340.00")
   })
-
-
 })

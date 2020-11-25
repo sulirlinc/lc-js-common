@@ -159,5 +159,41 @@ jwt.sign(payload, secretOrPrivateKey
       console.log(await jwt.getUserInfo({ authorization }));
     })
 ```
-
+ ```javascript  
+  it("20.mapper", () => {
+    const a = {}
+    L.mapper(a)({ array: [ 1, 2, 3, 4 ] }, 't')
+    console.log(a.t())
+  })
+  it("21.元转换为分，分转为元", () => {
+    const fenToYuan = L.convertAmount(100000001)
+    console.log(fenToYuan)
+    assert.equal(fenToYuan, "1,000,000.01")
+    const yuanToFen = L.convertAmount("1,000,000.01")
+    console.log(yuanToFen)
+    assert.equal(yuanToFen, 100000001)
+  })
+  it("22.随机串", () => {
+    console.log(L.randomCode(16))
+  })
+  it("23.随机数", () => {
+    console.log(L.randomNumber(16))
+  })
+  it("24.AES加密", () => {
+    const key = L.randomCode(16);
+    const { encrypt, decrypt } = L.aes;
+    const data = encrypt({ data: 'absdafadfasdfcdefg', key });
+    console.log(data)
+    const data1 = decrypt({ data, key });
+    console.log(data1)
+  })
+  it("25.替换末尾为0的方法", () => {
+    assert.equal(L.replaceNumWith0AtEnd("0.000128800",2), "0.0001288")
+    assert.equal(L.replaceNumWith0AtEnd("12340.8000",2), "12340.80")
+    assert.equal(L.replaceNumWith0AtEnd("0.80000",3), "0.800")
+    assert.equal(L.replaceNumWith0AtEnd("12340.8000", 3, true), "12,340.800")
+    assert.equal(L.replaceNumWith0AtEnd("12340", 3, true), "12,340.000")
+    assert.equal(L.replaceNumWith0AtEndEx({ num: "12340", thousandCharacter: true }),"12,340.00")
+  })
+```
 更多事例与覆盖请查看单元测试``test\test.js``
