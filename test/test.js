@@ -163,8 +163,11 @@ describe('公共库测试', () => {
   })
   it("25.替换末尾为0的方法", () => {
     assert.equal(L.replaceNumWith0AtEnd("0.000128800",2), "0.0001288")
-    assert.equal(L.replaceNumWith0AtEnd("0.8000",2), "0.80")
+    assert.equal(L.replaceNumWith0AtEnd("12340.8000",2), "12340.80")
     assert.equal(L.replaceNumWith0AtEnd("0.80000",3), "0.800")
+    assert.equal(L.replaceNumWith0AtEnd("12340.8000", 3, true), "12,340.800")
+    assert.equal(L.replaceNumWith0AtEnd("12340", 3, true), "12,340.000")
+    assert.equal(L.replaceNumWith0AtEndEx({ num: "12340", thousandCharacter: true }),"12,340.00")
   })
 
 
