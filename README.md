@@ -160,11 +160,19 @@ jwt.sign(payload, secretOrPrivateKey
     })
 ```
  ```javascript  
-  it("20.mapper", () => {
-    const a = {}
-    L.mapper(a)({ array: [ 1, 2, 3, 4 ] }, 't')
-    console.log(a.t())
-  })
+ it("20.mapper", () => {
+     const a = {}
+     const array = [ 1, 2, 3, 4 ];
+     const map = {
+       'a': 1,
+       'b': 2
+     };
+     L.mapper(a)({ array, map }, 't')
+     assert.equal(a.t(), array)
+     assert.equal(a.t('map'), map)
+     console.log(a.t())
+     console.log(a.t('map'))
+   })
   it("21.元转换为分，分转为元", () => {
     const fenToYuan = L.convertAmount(100000001)
     console.log(fenToYuan)
