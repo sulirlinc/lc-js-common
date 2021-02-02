@@ -202,7 +202,7 @@ jwt.sign(payload, secretOrPrivateKey
     assert.equal(L.replaceNumWith0AtEnd("12340.8000", 3, true), "12,340.800")
     assert.equal(L.replaceNumWith0AtEnd("12340", 3, true), "12,340.000")
     assert.equal(L.replaceNumWith0AtEndEx({ num: "12340", thousandCharacter: true }),"12,340.00")
-  })
+  }) 
   it("26.rsa", () => {
     console.log(L.rsa.createKey())
   })
