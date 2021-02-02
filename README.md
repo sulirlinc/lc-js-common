@@ -6,7 +6,7 @@
 例如：
 
 ```javascript
-import { L, TimeUnit,J } from 'lc-js-common';
+import { L, TimeUnit } from 'lc-js-common';
 const { assert } = require('chai');
 describe('公共库测试', () => {
 
@@ -202,6 +202,9 @@ jwt.sign(payload, secretOrPrivateKey
     assert.equal(L.replaceNumWith0AtEnd("12340.8000", 3, true), "12,340.800")
     assert.equal(L.replaceNumWith0AtEnd("12340", 3, true), "12,340.000")
     assert.equal(L.replaceNumWith0AtEndEx({ num: "12340", thousandCharacter: true }),"12,340.00")
+  })
+  it("26.rsa", () => {
+    console.log(L.rsa.createKey())
   })
 ```
 更多事例与覆盖请查看单元测试``test\test.js``

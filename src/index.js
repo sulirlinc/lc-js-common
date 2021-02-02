@@ -3,6 +3,7 @@ const crypto = require('crypto')
 const timer = require('./timer')
 const uuidv1 = require('uuid/v1')
 const jsrsasign = require('jsrsasign')
+const NodeRSA = require('node-rsa')
 const CryptoJS = jsrsasign.CryptoJS
 const enc = CryptoJS.enc
 const trim = value => {
@@ -217,6 +218,19 @@ const lc = {
       } catch (e) {
       }
       return 0
+    },
+    rsa: {
+      createKey() {
+        const key = new NodeRSA({ b: 2048 }); //生成2048位的密钥
+        const publicPEM = key.exportKey("pkcs8-public-pem");  //公钥
+        const privatePEM = key.exportKey("pkcs8-private-pem");//私钥
+        return {
+          privatePEM,
+          publicPEM,
+          publicKey: publicPEM.replace("-----BEGIN PUBLIC KEY-----\n","").replace("\n-----END PUBLIC KEY-----",""),
+          privateKey: privatePEM.replace("-----BEGIN PRIVATE KEY-----\n","").replace("\n-----END PRIVATE KEY-----","")
+        }
+      }
     }
   },
   array: {

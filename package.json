@@ -1,6 +1,6 @@
 {
   "name": "lc-js-common",
-  "version": "1.0.38",
+  "version": "1.0.39",
   "description": "公共库函数。",
   "author": "Linc",
   "main": "src/index.js",
@@ -16,6 +16,7 @@
     "currency-formatter": "^1.5.6",
     "jsonwebtoken": "^8.5.1",
     "jsrsasign": "^9.1.9",
+    "node-rsa": "^1.1.1",
     "timeunit": "^1.1.1",
     "uuid": "^3.3.3"
   },

@@ -162,9 +162,10 @@ describe('公共库测试', () => {
     console.log(L.randomNumber(16))
   })
   it("24.AES加密", () => {
-    const key = L.randomCode(16);
+    const key = "bUuL9inPj2isXZMS"//L.randomCode(16);
+    console.log(key)
     const { encrypt, decrypt } = L.aes;
-    const data = encrypt({ data: 'absdafadfasdfcdefg', key });
+    const data = encrypt({ data: 'MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAIKT6ARpR9oedF5g0PPbAdODjgRr881smKW/N3klOFPwTyEE4YBBQdotH5h2YgM9OAGnshesD6Nvo7nsueOtJ/ra/nfbTUTxP8joAC0WG9j4w0K+flwd+TLONsP8/K+VPrJe/uvND66zmX9RR2m27ImjDVdXrFRo7vJSvHmT9J9LAgMBAAECgYB8095a0TaSKsj+LDm01SnixQGv8m9Ic0deM/VZB57Yh4Ntwle8nyXP55Er1AgQpqZy1phnDuKIUEJJjCeMoszzHhI8k4n7Y7G3jh9FjFVOotZDdGTjaxniZ2O7PBbm1ILwqS7v3uz9ya9aghUde9wWXRD5u0j2CbonSvyMYkd4YQJBANYpPeX4cKxLmdERbofJ3bBR6fu9PlMiKFXsuudv2rgiIEP+/2KjtUq1j8uhnlv+kiPL3qkAeI8WULTlE/teAlsCQQCcFnFD1frOlApZB89dIcxO6mSaj9J02aykoZ1woR2IqAeRokcDjuMmWvnbseIFY2KFNCnpt5WsSPzMRdCVdonRAkBOcXrHsnFq2qIzrwPiXvGBtO9UkyOyBa/qkTSAszrU+UMCRPO8aKRuAgTynHdJ0Pwsem9LTe3a01yqdcIU74FDAkEAjwgFvMrdrOV94f3FKKurA/nIPNZkXY2GpcovcqFBZhPL88lH19vdDS263nZQDu32vueBLNl9P0YW2b10GTJpsQJAMof3zQNPdXLIxLCPNhAnNs+IZdt6ph0zdxt6I+HaTEGKZ7LYO2bynio9W/J56Xta69n4DYVsZEeSqSCoLdUwKA==', key });
     console.log(data)
     const data1 = decrypt({ data, key });
     console.log(data1)
@@ -178,5 +179,8 @@ describe('公共库测试', () => {
     assert.equal(
         L.replaceNumWith0AtEndEx({ num: "12340", thousandCharacter: true }),
         "12,340.00")
+  })
+  it("26.rsa", () => {
+    console.log(L.rsa.createKey())
   })
 })
