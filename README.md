@@ -213,7 +213,9 @@ jwt.sign(payload, secretOrPrivateKey
       { id: 1, name: 'a', b: 2 },
       { id: 1, name: 'a', b: 3 },
       { id: 2, name: 'b', b: 3 } ]
-    console.log(array.deDuplication(values, ['id'], ['id','name']))
+    const primaryKeys = ['id']; //去重主键
+    const targetKeys = ['id','name']; // 返回对象。
+    console.log(array.deDuplication(values, primaryKeys, targetKeys))
   })
   
 ```
