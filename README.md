@@ -6,7 +6,7 @@
 例如：
 
 ```javascript
-import { L, TimeUnit } from 'lc-js-common';
+import { L, TimeUnit, array } from 'lc-js-common';
 const { assert } = require('chai');
 describe('公共库测试', () => {
 
@@ -92,11 +92,11 @@ describe('公共库测试', () => {
   it("11.删除数组元素", () => {
     const deleteIndexArray = [ 1, 2, 3, 4, 5, 9, 2, 3, 5, 4, 3 ];
     //删除下标
-    L.array.deleteIndex(deleteIndexArray, 3, 2, 4, 5, 2)
+    array.deleteIndex(deleteIndexArray, 3, 2, 4, 5, 2)
     assert.equal(JSON.stringify(deleteIndexArray),
         JSON.stringify([ 1, 2, 2, 3, 5, 4, 3 ]))
     const deleteLastArray = [ 1, 2, 3 ];
-    L.array.deleteLast(deleteLastArray)
+    array.deleteLast(deleteLastArray)
     assert.equal(JSON.stringify(deleteLastArray), JSON.stringify([ 1, 2 ]))
   })
 
@@ -206,5 +206,15 @@ jwt.sign(payload, secretOrPrivateKey
   it("26.rsa", () => {
     console.log(L.rsa.createKey())
   })
+  
+   it("27.数组去重", () => {
+    const values = [
+        { id: 1, name: 'a', b: 1 },
+      { id: 1, name: 'a', b: 2 },
+      { id: 1, name: 'a', b: 3 },
+      { id: 2, name: 'b', b: 3 } ]
+    console.log(array.deDuplication(values, ['id'], ['id','name']))
+  })
+  
 ```
 更多事例与覆盖请查看单元测试``test\test.js``

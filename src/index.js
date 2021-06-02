@@ -234,6 +234,36 @@ const lc = {
     }
   },
   array: {
+    /**
+     * 去重
+     * @param array
+     * @param primaryKeys
+     * @param targetKeys
+     */
+    deDuplication(array, primaryKeys = [], targetKeys = []) {
+      const keys = []
+      return array.map(value => {
+        const pk = {}
+        targetKeys = targetKeys.length < 1 ? primaryKeys : targetKeys
+        if (primaryKeys.length > 0) {
+          for (let primaryKey of primaryKeys) {
+            pk[primaryKey] = value[primaryKey];
+          }
+          const searchElement = JSON.stringify(pk);
+          if (keys.includes(searchElement)) {
+            return;
+          }
+          keys.push(searchElement);
+          const v = {}
+          for (let targetKey of targetKeys) {
+            v[targetKey] = value[targetKey]
+          }
+          return v
+        }
+        return value
+      })
+    //  return [ ...new Set(array.map(value=>JSON.stringify(value))) ].map(value => JSON.parse(value));
+    },
     isArrayType(value) {
       return value instanceof Array
     },
