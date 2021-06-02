@@ -185,7 +185,7 @@ describe('公共库测试', () => {
   })
   it("27.数组去重", () => {
     let values = [
-        { id: 1, name: 'a', b: 1 },
+      { id: 1, name: 'a', b: 1 },
       { id: 1, name: 'a', b: 2 },
       { id: 1, name: 'a', b: 3 },
       { id: 2, name: 'b', b: 3 } ]

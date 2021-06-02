@@ -261,7 +261,7 @@ const lc = {
           return v
         }
         return value
-      })
+      }).filter(value => !!value)
     //  return [ ...new Set(array.map(value=>JSON.stringify(value))) ].map(value => JSON.parse(value));
     },
     isArrayType(value) {

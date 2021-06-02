@@ -216,6 +216,7 @@ jwt.sign(payload, secretOrPrivateKey
     const primaryKeys = ['id']; //去重主键
     const targetKeys = ['id','name']; // 返回对象。
     console.log(array.deDuplication(values, primaryKeys, targetKeys))
+    // 控制台打印值：[ { id: 1, name: 'a' }, { id: 2, name: 'b' } ]
   })
   
 ```
