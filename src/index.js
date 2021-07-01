@@ -52,7 +52,7 @@ const padLeftZero = (str) => {
   return ('00' + str).substr(str.length)
 }
 const arrayDeleteByIndex = (array, index) => {
-  if (!lc.L.array.isArrayType(array) || array.length - 1 < index) {
+  if (!lc.array.isArrayType(array) || array.length - 1 < index) {
     return array
   }
   const number = array.length - 1;
@@ -60,7 +60,7 @@ const arrayDeleteByIndex = (array, index) => {
   for (let i = index; i < number; i++) {
     array[i] = array[i + 1]
   }
-  return lc.L.array.deleteLast(array)
+  return lc.array.deleteLast(array)
 }
 /**
  * 日期格式化
