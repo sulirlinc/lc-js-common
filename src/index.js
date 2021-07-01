@@ -268,7 +268,7 @@ const lc = {
       return value instanceof Array
     },
     deleteLast(array) {
-      if (!lc.L.array.isArrayType(array)) {
+      if (!lc.array.isArrayType(array)) {
         return array
       }
       const number = array.length - 1;
