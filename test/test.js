@@ -165,7 +165,10 @@ describe('公共库测试', () => {
     const key = "bUuL9inPj2isXZMS"//L.randomCode(16);
     console.log(key)
     const { encrypt, decrypt } = L.aes;
-    const data = encrypt({ data: 'MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAIKT6ARpR9oedF5g0PPbAdODjgRr881smKW/N3klOFPwTyEE4YBBQdotH5h2YgM9OAGnshesD6Nvo7nsueOtJ/ra/nfbTUTxP8joAC0WG9j4w0K+flwd+TLONsP8/K+VPrJe/uvND66zmX9RR2m27ImjDVdXrFRo7vJSvHmT9J9LAgMBAAECgYB8095a0TaSKsj+LDm01SnixQGv8m9Ic0deM/VZB57Yh4Ntwle8nyXP55Er1AgQpqZy1phnDuKIUEJJjCeMoszzHhI8k4n7Y7G3jh9FjFVOotZDdGTjaxniZ2O7PBbm1ILwqS7v3uz9ya9aghUde9wWXRD5u0j2CbonSvyMYkd4YQJBANYpPeX4cKxLmdERbofJ3bBR6fu9PlMiKFXsuudv2rgiIEP+/2KjtUq1j8uhnlv+kiPL3qkAeI8WULTlE/teAlsCQQCcFnFD1frOlApZB89dIcxO6mSaj9J02aykoZ1woR2IqAeRokcDjuMmWvnbseIFY2KFNCnpt5WsSPzMRdCVdonRAkBOcXrHsnFq2qIzrwPiXvGBtO9UkyOyBa/qkTSAszrU+UMCRPO8aKRuAgTynHdJ0Pwsem9LTe3a01yqdcIU74FDAkEAjwgFvMrdrOV94f3FKKurA/nIPNZkXY2GpcovcqFBZhPL88lH19vdDS263nZQDu32vueBLNl9P0YW2b10GTJpsQJAMof3zQNPdXLIxLCPNhAnNs+IZdt6ph0zdxt6I+HaTEGKZ7LYO2bynio9W/J56Xta69n4DYVsZEeSqSCoLdUwKA==', key });
+    const data = encrypt({
+      data: 'MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAIKT6ARpR9oedF5g0PPbAdODjgRr881smKW/N3klOFPwTyEE4YBBQdotH5h2YgM9OAGnshesD6Nvo7nsueOtJ/ra/nfbTUTxP8joAC0WG9j4w0K+flwd+TLONsP8/K+VPrJe/uvND66zmX9RR2m27ImjDVdXrFRo7vJSvHmT9J9LAgMBAAECgYB8095a0TaSKsj+LDm01SnixQGv8m9Ic0deM/VZB57Yh4Ntwle8nyXP55Er1AgQpqZy1phnDuKIUEJJjCeMoszzHhI8k4n7Y7G3jh9FjFVOotZDdGTjaxniZ2O7PBbm1ILwqS7v3uz9ya9aghUde9wWXRD5u0j2CbonSvyMYkd4YQJBANYpPeX4cKxLmdERbofJ3bBR6fu9PlMiKFXsuudv2rgiIEP+/2KjtUq1j8uhnlv+kiPL3qkAeI8WULTlE/teAlsCQQCcFnFD1frOlApZB89dIcxO6mSaj9J02aykoZ1woR2IqAeRokcDjuMmWvnbseIFY2KFNCnpt5WsSPzMRdCVdonRAkBOcXrHsnFq2qIzrwPiXvGBtO9UkyOyBa/qkTSAszrU+UMCRPO8aKRuAgTynHdJ0Pwsem9LTe3a01yqdcIU74FDAkEAjwgFvMrdrOV94f3FKKurA/nIPNZkXY2GpcovcqFBZhPL88lH19vdDS263nZQDu32vueBLNl9P0YW2b10GTJpsQJAMof3zQNPdXLIxLCPNhAnNs+IZdt6ph0zdxt6I+HaTEGKZ7LYO2bynio9W/J56Xta69n4DYVsZEeSqSCoLdUwKA==',
+      key
+    });
     console.log(data)
     const data1 = decrypt({ data, key });
     console.log(data1)
@@ -189,8 +192,28 @@ describe('公共库测试', () => {
       { id: 1, name: 'a', b: 2 },
       { id: 1, name: 'a', b: 3 },
       { id: 2, name: 'b', b: 3 } ]
-    const primaryKeys = ['id']; //去重主键
-    const targetKeys = ['id','name']; // 返回对象。
+    const primaryKeys = [ 'id' ]; //去重主键
+    const targetKeys = [ 'id', 'name' ]; // 返回对象。
     console.log(array.deDuplication(values, primaryKeys, targetKeys))
   })
+  it("28.时间段内只被执行一次。", () => {
+    const key = L.uuid();
+    const fun = function () {
+      console.log('被执行了。')
+    };
+    const lockTime = 3;
+    const timeUnit = TimeUnit.seconds;
+    // lockTime= 3 与TimeUnit.seconds ，3秒内，只能被执行一次。
+    L.defineExecution(fun, {
+      key, lockTime, timeUnit
+    })
+    setTimeout(() => L.defineExecution(fun, {
+      key, lockTime, timeUnit
+    }), 2000);
+    setTimeout(() => L.defineExecution(fun, {
+      key, lockTime, timeUnit
+    }), 2000);
+    //方法在4秒内被执行了，3次，开始执行一次，睡2秒后被执行一次，第4秒又被执行了一次，
+    //最后结果会出现两次被执行了。分别是开始调用与第三次调用。
+  }).timeout(100000)
 })

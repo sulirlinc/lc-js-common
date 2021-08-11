@@ -6,13 +6,20 @@ const jsrsasign = require('jsrsasign')
 const NodeRSA = require('node-rsa')
 const CryptoJS = jsrsasign.CryptoJS
 const enc = CryptoJS.enc
+const timeoutMap = {}
+const errors = {
+  true(errorCodeMessage = { message: '逻辑错误', code: -10000 }) {
+    throw errorCodeMessage;
+  },
+  false() {
+  }
+}
 const trim = value => {
   if (value == null || typeof value == "undefined") {
     return "";
   }
   return value.replace(/(^\s*)|(\s*$)/g, "");
 }
-
 function buildRandomCode(length,
     characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789") {
   let result = "";
@@ -231,8 +238,18 @@ const lc = {
           privateKey: privatePEM.replace("-----BEGIN PRIVATE KEY-----\n","").replace("\n-----END PRIVATE KEY-----","")
         }
       }
-    }
-  },
+    },
+    defineExecution(fun, { key, lockTime = 1, timeUnit = lc.TimeUnit.minutes }) {
+      errors[!key]({ message: "Key 不能为空", code: -10001 })
+      errors[!(fun instanceof Function)]({ message: "必须是方法", code: -10002 })
+      const now = new Date() + 0
+      const timeout = timeoutMap[key] || 0
+      if (now >= timeout) {
+        timeoutMap[key] = now + timeUnit.toMillis(lockTime)
+        fun()
+      }
+  }
+},
   array: {
     /**
      * 去重
