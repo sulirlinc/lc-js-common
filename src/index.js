@@ -155,6 +155,16 @@ const lc = {
         return true
       }
     },
+    isFunction(val) {
+      return typeof val === 'function'
+    },
+    isObject(val) {
+      return val !== null && typeof val === 'object'
+    },
+    isPromise(val){
+      lc.L.isObject(val) && lc.L.isFunction(val.then) && lc.L.isFunction(
+          val.catch)
+    },
     isNullOrEmpty: value => {
       return lc.L.isNull(value) || typeMapNullOrEmpty[typeof value](value)
     },
