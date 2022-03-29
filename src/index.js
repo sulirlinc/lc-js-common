@@ -181,6 +181,24 @@ const lc = {
     md5(value) {
       return CryptoJS.MD5(value.toString()).toString().toLowerCase();
     },
+    signMd5(signSalt, map, {
+      symbol = "|",
+      includeKey = false,
+      joiner = "",
+      signKeySymbol = "|"
+    } = {}) {
+      const arr = []
+      for (const k in map) {
+        arr.push(k)
+      }
+      arr.sort()
+      let value = ""
+      for (const k of arr) {
+        value += symbol + (includeKey ? k + joiner : "") + map[k]
+      }
+      const content = value.substring(1) + signKeySymbol + signSalt;
+      return lc.L.md5(content)
+    },
     hash512(key, value) {
       return CryptoJS.HmacSHA512(key, value.toString()).toString();
     },

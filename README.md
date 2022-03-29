@@ -218,6 +218,32 @@ jwt.sign(payload, secretOrPrivateKey
     console.log(array.deDuplication(values, primaryKeys, targetKeys))
     // 控制台打印值：[ { id: 1, name: 'a' }, { id: 2, name: 'b' } ]
   })
-  
+  it("28.时间段内只被执行一次。", () => {
+    const key = L.uuid();
+    const fun = function () {
+      console.log('被执行了。')
+    };
+    const lockTime = 3;
+    const timeUnit = TimeUnit.seconds;
+    // lockTime= 3 与TimeUnit.seconds ，3秒内，只能被执行一次。
+    L.defineExecution(fun, {
+      key, lockTime, timeUnit
+    })
+    setTimeout(() => L.defineExecution(fun, {
+      key, lockTime, timeUnit
+    }), 2000);
+    setTimeout(() => L.defineExecution(fun, {
+      key, lockTime, timeUnit
+    }), 2000);
+    //方法在4秒内被执行了，3次，开始执行一次，睡2秒后被执行一次，第4秒又被执行了一次，
+    //最后结果会出现两次被执行了。分别是开始调用与第三次调用。
+  }).timeout(100000)
+  it("29.signMd5", () => {
+    console.log(L.signMd5("abcd122354",{
+      a1:"123",
+      c2:"456",
+      b:"dfsgf"
+    }))
+  })
 ```
 更多事例与覆盖请查看单元测试``test\test.js``
