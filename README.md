@@ -151,13 +151,22 @@ jwt.sign(payload, secretOrPrivateKey
 * `keyid`
 * `mutatePayload`: if true, the sign function will modify the payload object directly. This is useful if you need a raw reference to the payload after claims
  ```javascript
-  it("19.jwt",async () => {
-      const jwt = jsonWebToken("123456");
-      const authorization = await jwt.sign(
-          { userName: 'chong', roles: [ 'admin', 'manager' ] }, { expiresIn: '2day' });//https://github.com/vercel/ms
-      console.log(authorization)
-      console.log(await jwt.getUserInfo({ authorization }));
-    })
+ it("19.jwt", async () => {
+  const jwt = jsonWebToken("bd82oGov07WK^f.@");
+  const authorization = await jwt.sign(
+          {
+            name: 'Linc',
+            age: 32
+          },
+          {
+            expiresIn: '2day', header: {
+              userId: 1001, name: "Linc"
+            }
+          });
+  console.log("verify", await jwt.verify(authorization, { complete: true }))
+  console.log(authorization)
+  console.log(await jwt.getUserInfo({ authorization }));
+})
 ```
  ```javascript  
  it("20.mapper", () => {

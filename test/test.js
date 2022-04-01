@@ -127,10 +127,18 @@ describe('公共库测试', () => {
   })
 
   it("19.jwt", async () => {
-    const jwt = jsonWebToken("123456");
+    const jwt = jsonWebToken("bd82oGov07WK^f.@");
     const authorization = await jwt.sign(
-        { userName: 'chong', roles: [ 'admin', 'manager' ] },
-        { expiresIn: '2day' });
+        {
+          name: 'Linc',
+          age: 32
+        },
+        {
+          expiresIn: '2day', header: {
+            userId: 1001, name: "Linc"
+          }
+        });
+    console.log("verify", await jwt.verify(authorization, { complete: true }))
     console.log(authorization)
     console.log(await jwt.getUserInfo({ authorization }));
   })
@@ -155,8 +163,11 @@ describe('公共库测试', () => {
     console.log(yuanToFen)
     assert.equal(yuanToFen, 100000001)
   })
-  it("22.随机串", () => {
-    console.log(L.randomCode(16))
+  it("22.随机串(包含符号)", () => {
+    console.log(L.randomSymbolCode(16))
+  })
+  it("22.字母+数字随机串", () => {
+    console.log(L.randomCode(32))
   })
   it("23.随机数", () => {
     console.log(L.randomNumber(16))
@@ -217,10 +228,20 @@ describe('公共库测试', () => {
     //最后结果会出现两次被执行了。分别是开始调用与第三次调用。
   }).timeout(100000)
   it("29.signMd5", () => {
-    console.log(L.signMd5("abcd122354",{
-      a1:"123",
-      c2:"456",
-      b:"dfsgf"
+    const signSalt = "Bmt0p4A5PfZvfKdt";
+    /*console.log(L.signMd5(signSalt, {
+      "sign": "b950fca93c66b8dc7f3e97e5a93ff46a",
+      "message": "这个是已经通过签名的，不在线时，上线时推送。",
+      "userId": 1001,
+      "type": "simple"
+    }))*/
+    console.log(L.signMd5(signSalt, {
+      "title": "提示",
+      "sign": "3398808fd6afd2f72d34d9d37fb8cb08",
+      "message": "userId:就是这么好玩。",
+      "duration": 0,
+      "userId": 1001,
+      "type": "simple"
     }))
   })
 

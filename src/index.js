@@ -1,4 +1,4 @@
-const { format, unformat } = require('currency-formatter')
+const { format } = require('currency-formatter')
 const crypto = require('crypto')
 const timer = require('./timer')
 const uuidv1 = require('uuid/v1')
@@ -20,6 +20,7 @@ const trim = value => {
   }
   return value.replace(/(^\s*)|(\s*$)/g, "");
 }
+
 function buildRandomCode(length,
     characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789") {
   let result = "";
@@ -28,6 +29,11 @@ function buildRandomCode(length,
     result += characters.charAt(Math.floor(Math.random() * charactersLength));
   }
   return result;
+}
+
+function buildRandomSymbolCode(length) {
+  return buildRandomCode(length,
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~!@#$%^&*.,");
 }
 
 function buildRandomNumber(length) {
@@ -106,6 +112,9 @@ const lc = {
     randomCode(length) {
       return buildRandomCode(length)
     },
+    randomSymbolCode(length) {
+      return buildRandomSymbolCode(length)
+    },
     randomNumber(length) {
       return buildRandomNumber(length)
     },
@@ -113,8 +122,11 @@ const lc = {
      * 替换末尾为0的方法，
      * 如：0.01000可替换成0.01
      */
-    replaceNumWith0AtEnd(num, keepDecimalPlaces = 2, thousandCharacter = false) {
-      const s = `${ num }`.replace(new RegExp(`(\\d+\\.\\d{${keepDecimalPlaces}}(\\d*[1-9])*)(0*)`), '$1');
+    replaceNumWith0AtEnd(num, keepDecimalPlaces = 2,
+        thousandCharacter = false) {
+      const s = `${ num }`.replace(
+          new RegExp(`(\\d+\\.\\d{${keepDecimalPlaces}}(\\d*[1-9])*)(0*)`),
+          '$1');
       if (thousandCharacter) {
         const split = s.split('.')
         return `${ (split[0]).replace(/\d{1,3}(?=(\d{3})+$)/g,
@@ -338,16 +350,23 @@ const lc = {
                 options,
                 (err, token) => err ? reject() : resolve(token)));
       },
-      getUserInfo({ authorization, check = true }) {
+      verify(authorization, options) {
+        return new Promise((resolve, reject) =>
+            jwt.verify(authorization, key, options,
+                (err, authData) => err ? reject(
+                        new Error(
+                            `无效的授权码。\n${ err.message || '' }\n${ err.stack }`))
+                    : resolve(authData)));
+      },
+      getUserInfo({ authorization, check = true, options = {} }) {
         return new Promise((resolve, reject) => {
-          let userInfo = jwt.decode(authorization);
           if (!check) {
-            resolve(userInfo);
-            return
+            resolve(jwt.decode(authorization, options));
+          } else {
+            ts.verify(authorization, options).then(
+                (info) => resolve(info)).catch(
+                e => reject(e))
           }
-          jwt.verify(authorization, key, (err, authData) => err ? reject(
-              new Error(`无效的授权码。\n${ err.message || '' }\n${ err.stack }`))
-              : resolve(authData));
         })
       }
     }

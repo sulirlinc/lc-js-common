@@ -2,7 +2,6 @@ const uuidv1 = require('uuid/v1');
 const TimeUnit = require('timeunit')
 const triggers = {}
 const intervals = {}
-
 class Timer {
   doTimer({ intervalsValue = 1000 }) {
     if (typeof intervalsValue !== "number") {
