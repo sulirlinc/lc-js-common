@@ -6,7 +6,7 @@
 例如：
 
 ```javascript
-import { L, TimeUnit, array } from 'lc-js-common';
+import { L, TimeUnit, array, doConsoleConfig } from 'lc-js-common';
 const { assert } = require('chai');
 describe('公共库测试', () => {
 
@@ -255,7 +255,7 @@ jwt.sign(payload, secretOrPrivateKey
     }))
   })
   it("30.add console.log time add code line", () => {
-    myConsole()
+    doConsoleConfig()
     console.log("hello world.","4466","7788","15458")
   })
 ```

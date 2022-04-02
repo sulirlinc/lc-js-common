@@ -372,7 +372,7 @@ const lc = {
     }
     return ts
   },
-  myConsole({ padEndNumber = 40, address = process.cwd() + "/" } = {}) {
+  doConsoleConfig({ padEndNumber = 40, address = process.cwd() + "/" } = {}) {
     const getStackTrace = function () {
       const obj = {};
       Error.captureStackTrace(obj, getStackTrace);
@@ -393,7 +393,6 @@ const lc = {
               padEndNumber, " ")
           + "] "
           + arguments[0]
-      console.debug(__dirname)
       /*arguments[i] += "[" + lc.L.now({ format: 'yyyy-MM-dd hh:mm:sss' })
           + "]["
           + line.replace("(", "").replace(")", "") + "]"*/
