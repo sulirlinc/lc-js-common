@@ -1,4 +1,4 @@
-const { L, TimeUnit, jsonWebToken, array } = require('../src')
+const { L, TimeUnit, jsonWebToken, array, myConsole } = require('../src')
 const { assert } = require('chai');
 describe('公共库测试', () => {
 
@@ -243,6 +243,10 @@ describe('公共库测试', () => {
       "userId": 1001,
       "type": "simple"
     }))
+  })
+  it("30.add console.log time add code line", () => {
+    myConsole()
+    console.log("hello world.","4466","7788","15458")
   })
 
 })

@@ -254,5 +254,9 @@ jwt.sign(payload, secretOrPrivateKey
       b:"dfsgf"
     }))
   })
+  it("30.add console.log time add code line", () => {
+    myConsole()
+    console.log("hello world.","4466","7788","15458")
+  })
 ```
 更多事例与覆盖请查看单元测试``test\test.js``

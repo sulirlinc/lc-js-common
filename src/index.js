@@ -371,6 +371,35 @@ const lc = {
       }
     }
     return ts
+  },
+  myConsole({ padEndNumber = 40, address = process.cwd() + "/" } = {}) {
+    const getStackTrace = function () {
+      const obj = {};
+      Error.captureStackTrace(obj, getStackTrace);
+      return obj.stack;
+    };
+    const log = console.log
+    console.log = function () {
+      const stack = getStackTrace() || ""
+      const matchResult = stack.match(/\(.*?\)/g) || []
+      const line = matchResult[1] || ""
+      const i = arguments.length - 1
+      if (typeof arguments[i] == 'object') {
+        arguments[i] = JSON.stringify(arguments[i])
+      }
+      arguments[0] = lc.L.now({ format: 'yyyy-MM-dd hh:mm:ss.sss' })
+          + "["
+          + line.replace("(", "").replace(")", "").replace(address, "").padEnd(
+              padEndNumber, " ")
+          + "] "
+          + arguments[0]
+      console.debug(__dirname)
+      /*arguments[i] += "[" + lc.L.now({ format: 'yyyy-MM-dd hh:mm:sss' })
+          + "]["
+          + line.replace("(", "").replace(")", "") + "]"*/
+      log.apply(console, arguments)
+    };
+
   }
 }
 
