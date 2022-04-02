@@ -387,8 +387,8 @@ const lc = {
       if (typeof arguments[i] == 'object') {
         arguments[i] = JSON.stringify(arguments[i])
       }
-      arguments[0] = lc.L.now({ format: 'yyyy-MM-dd hh:mm:ss.sss' })
-          + "["
+      arguments[0] = lc.L.now({ format: 'yyyy-MM-dd hh:mm:ssss' })
+          + " ["
           + line.replace("(", "").replace(")", "").replace(address, "").padEnd(
               padEndNumber, " ")
           + "] "
