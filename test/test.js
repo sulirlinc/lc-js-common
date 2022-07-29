@@ -113,6 +113,7 @@ describe('公共库测试', () => {
 
   it("16.hash512", () => {
     console.log(L.hash512("666", 123456))
+    console.log(L.hash512NoSalt("xdak3@@#Fsg2x"))
   })
 
   it("17.base64", () => {
@@ -235,14 +236,20 @@ describe('公共库测试', () => {
       "userId": 1001,
       "type": "simple"
     }))*/
-    console.log(L.signMd5(signSalt, {
-      "title": "提示",
-      "sign": "3398808fd6afd2f72d34d9d37fb8cb08",
-      "message": "userId:就是这么好玩。",
-      "duration": 0,
-      "userId": 1001,
-      "type": "simple"
-    }))
+    const m = {
+      title: "提示",
+      message: "userId:433测试。",
+      duration: 2000,
+      userId: 433,
+      type: "success",
+      biz: JSON.stringify({
+        code: "paymentOrder",
+        path: "",
+        objectId: "1234567L"
+      })
+    };
+    m['sign'] = L.signMd5(signSalt, m)
+    console.log(JSON.stringify(m))
   })
   it("30.add console.log time add code line", () => {
     doConsoleConfig()

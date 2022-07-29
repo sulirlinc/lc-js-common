@@ -214,6 +214,9 @@ const lc = {
     hash512(key, value) {
       return CryptoJS.HmacSHA512(key, value.toString()).toString();
     },
+    hash512NoSalt(value) {
+      return CryptoJS.SHA512(value.toString()).toString()
+    },
     aes: {
       cipherEncoding: 'base64',
       clearEncoding: 'utf8',
@@ -389,7 +392,9 @@ const lc = {
       }
       arguments[0] = lc.L.now({ format: 'yyyy-MM-dd hh:mm:ssss' })
           + " ["
-          + line.replace("(", "").replace(")", "").replace(address, "").padEnd(
+          + line.replace("(", "").replace(")", "").replace(address, "")
+          .replace("/snapshot/service/src/","")
+          .padEnd(
               padEndNumber, " ")
           + "] "
           + arguments[0]
