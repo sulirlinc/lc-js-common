@@ -263,7 +263,16 @@ describe('公共库测试', () => {
     assert.equal(L.removeLashSlash('https://127.0.0.1:8080'), 'https://127.0.0.1:8080')
     assert.equal(L.addLashSlash('https://127.0.0.1:8080'), 'https://127.0.0.1:8080/')
     assert.equal(L.addLashSlash('https://127.0.0.1:8080/'), 'https://127.0.0.1:8080/')
-
+  })
+  it("40.includeSlash = false value = /abc/efg => abc/efg value = abc/efg => abc/efg includeSlash = true value = /abc/efg => /abc/efg value = abc/efg => /abc/efg", () => {
+    assert.equal(L.replacePathFirstSlash({ value:'/abc/efg', includeSlash: true }), '/abc/efg')
+    assert.equal(L.replacePathFirstSlash({ value:'abc/efg', includeSlash: true }), '/abc/efg')
+    assert.equal(L.replacePathFirstSlash({ value:'abc/efg', includeSlash: false }), 'abc/efg')
+    assert.equal(L.replacePathFirstSlash({ value:'/abc/efg', includeSlash: false }), 'abc/efg')
+    assert.equal(L.removeFirstSlash('/abc/efg'), 'abc/efg')
+    assert.equal(L.removeFirstSlash('abc/efg'), 'abc/efg')
+    assert.equal(L.addFirstSlash('/abc/efg'), '/abc/efg')
+    assert.equal(L.addFirstSlash('abc/efg'), '/abc/efg')
   })
 
 })
