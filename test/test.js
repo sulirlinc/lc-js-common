@@ -255,5 +255,15 @@ describe('公共库测试', () => {
     doConsoleConfig()
     console.log("hello world.","4466","7788","15458")
   })
+  it("39.includeSlash = false value = https://127.0.0.1:8080/ => https://127.0.0.1:8080 value = https://127.0.0.1:8080 => https://127.0.0.1:8080 includeSlash = true value = https://127.0.0.1:8080/ => https://127.0.0.1:8080/ value = https://127.0.0.1:8080 => https://127.0.0.1:8080/", () => {
+    assert.equal(L.replacePathLastSlash({ value:'https://127.0.0.1:8080/', includeSlash: true }), 'https://127.0.0.1:8080/')
+    assert.equal(L.replacePathLastSlash({ value:'https://127.0.0.1:8080/', includeSlash: false }), 'https://127.0.0.1:8080')
+    assert.equal(L.replacePathLastSlash({ value:'https://127.0.0.1:8080', includeSlash: true }), 'https://127.0.0.1:8080/')
+    assert.equal(L.removeLashSlash('https://127.0.0.1:8080/'), 'https://127.0.0.1:8080')
+    assert.equal(L.removeLashSlash('https://127.0.0.1:8080'), 'https://127.0.0.1:8080')
+    assert.equal(L.addLashSlash('https://127.0.0.1:8080'), 'https://127.0.0.1:8080/')
+    assert.equal(L.addLashSlash('https://127.0.0.1:8080/'), 'https://127.0.0.1:8080/')
+
+  })
 
 })

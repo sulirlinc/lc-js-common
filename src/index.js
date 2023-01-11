@@ -109,6 +109,16 @@ const lc = {
     dateFormatter,
     timer,
     trim,
+    replacePathLastSlash({ value = '', includeSlash = true }) {
+      value = value.replace(/^([^|]+)(\/)$/g, '$1')
+      return value + (includeSlash ? '/' : '')
+    },
+    removeLashSlash(value = '') {
+      return lc.L.replacePathLastSlash({ value, includeSlash: false })
+    },
+    addLashSlash(value = '') {
+      return lc.L.replacePathLastSlash({ value, includeSlash: true })
+    },
     randomCode(length) {
       return buildRandomCode(length)
     },
