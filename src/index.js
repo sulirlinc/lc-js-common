@@ -138,12 +138,13 @@ const lc = {
     randomNumber(length) {
       return buildRandomNumber(length)
     },
-    randomNumberValue(maxValue = 10, minValue = 0) {
-      if (minValue >= maxValue) {
-        return 0
+    randomNumberValue(x = 10, y = 0) {
+      const minValue = Math.min(x, y)
+      const maxValue = Math.max(x, y)
+      if (minValue === maxValue) {
+        return minValue
       }
-      const number = Math.ceil(Math.random() * maxValue) + minValue;
-      return number > maxValue ? number - minValue : number;
+      return Math.floor(Math.random() * (maxValue - minValue + 1)) + minValue;
     },
     /**
      * 替换末尾为0的方法，
@@ -213,8 +214,8 @@ const lc = {
     },
     checkIDNumber(value) {
       return !lc.L.isNullOrEmpty(value)
-        && /^[1-9]\d{5}(18|19|20|(3\d))\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/.test(
-          value)
+          && /^[1-9]\d{5}(18|19|20|(3\d))\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/.test(
+              value)
     },
     range(size, callback) {
       if (/^[1-9]\d{0,9}$/.test(size) && typeof callback === 'function') {
@@ -265,7 +266,7 @@ const lc = {
         const decipher = crypto.createDecipheriv(lc.L.aes.aes128Ecb, key, iv)
         decipher.setAutoPadding(true)
         cipherChunks.push(decipher.update(data, lc.L.aes.cipherEncoding,
-          lc.L.aes.clearEncoding))
+            lc.L.aes.clearEncoding))
         cipherChunks.push(decipher.final(lc.L.aes.clearEncoding))
         return cipherChunks.join('')
       }
@@ -310,14 +311,14 @@ const lc = {
           privatePEM,
           publicPEM,
           publicKey: publicPEM.replace('-----BEGIN PUBLIC KEY-----\n',
-            '').replace('\n-----END PUBLIC KEY-----', ''),
+              '').replace('\n-----END PUBLIC KEY-----', ''),
           privateKey: privatePEM.replace('-----BEGIN PRIVATE KEY-----\n',
-            '').replace('\n-----END PRIVATE KEY-----', '')
+              '').replace('\n-----END PRIVATE KEY-----', '')
         }
       }
     },
     defineExecution(fun,
-      { key, lockTime = 1, timeUnit = lc.TimeUnit.minutes }) {
+        { key, lockTime = 1, timeUnit = lc.TimeUnit.minutes }) {
       errors[!key]({ message: 'Key 不能为空', code: -10001 })
       errors[!(fun instanceof Function)]({ message: '必须是方法', code: -10002 })
       const now = new Date() + 0
@@ -373,7 +374,7 @@ const lc = {
     },
     deleteIndex(array, ...indexes) {
       let i = 0;
-      [...new Set(indexes)].sort().map(index => {
+      [ ...new Set(indexes) ].sort().map(index => {
         arrayDeleteByIndex(array, index - i++)
       })
       return array
@@ -384,17 +385,17 @@ const lc = {
     const ts = {
       sign(payload, options) {
         return new Promise(
-          (resolve, reject) => jwt.sign(payload, key,
-            options,
-            (err, token) => err ? reject() : resolve(token)))
+            (resolve, reject) => jwt.sign(payload, key,
+                options,
+                (err, token) => err ? reject() : resolve(token)))
       },
       verify(authorization, options) {
         return new Promise((resolve, reject) =>
-          jwt.verify(authorization, key, options,
-            (err, authData) => err ? reject(
-              new Error(
-                `无效的授权码。\n${ err.message || '' }\n${ err.stack }`))
-              : resolve(authData)))
+            jwt.verify(authorization, key, options,
+                (err, authData) => err ? reject(
+                    new Error(
+                        `无效的授权码。\n${ err.message || '' }\n${ err.stack }`))
+                    : resolve(authData)))
       },
       getUserInfo({ authorization, check = true, options = {} }) {
         return new Promise((resolve, reject) => {
@@ -402,8 +403,8 @@ const lc = {
             resolve(jwt.decode(authorization, options))
           } else {
             ts.verify(authorization, options).then(
-              (info) => resolve(info)).catch(
-              e => reject(e))
+                (info) => resolve(info)).catch(
+                e => reject(e))
           }
         })
       }
@@ -426,12 +427,12 @@ const lc = {
         arguments[i] = JSON.stringify(arguments[i])
       }
       arguments[0] = lc.L.now({ format: 'yyyy-MM-dd hh:mm:ssss' })
-        + ' ['
-        + line.replace('(', '').replace(')', '').replace(address, '').replace(
-          '/snapshot/service/src/', '').padEnd(
-          padEndNumber, ' ')
-        + '] '
-        + arguments[0]
+          + ' ['
+          + line.replace('(', '').replace(')', '').replace(address, '').replace(
+              '/snapshot/service/src/', '').padEnd(
+              padEndNumber, ' ')
+          + '] '
+          + arguments[0]
       /*arguments[i] += "[" + lc.L.now({ format: 'yyyy-MM-dd hh:mm:sss' })
           + "]["
           + line.replace("(", "").replace(")", "") + "]"*/

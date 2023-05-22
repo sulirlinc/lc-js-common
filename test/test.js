@@ -174,7 +174,7 @@ describe('公共库测试', () => {
     console.log(L.randomNumber(16))
   })
   it("23.2.随机指定大小的数", () => {
-    console.log(L.randomNumberValue(20))
+    console.log(L.randomNumberValue(2))
   })
   it("24.AES加密", () => {
     const key = "bUuL9inPj2isXZMS"//L.randomCode(16);
@@ -256,7 +256,7 @@ describe('公共库测试', () => {
   })
   it("30.add console.log time add code line", () => {
     doConsoleConfig()
-    console.log("hello world.","4466","7788","15458")
+    console.log("hello world.", "4466", "7788", "15458")
   })
   it("39.includeSlash = false value = https://127.0.0.1:8080/ => https://127.0.0.1:8080 value = https://127.0.0.1:8080 => https://127.0.0.1:8080 includeSlash = true value = https://127.0.0.1:8080/ => https://127.0.0.1:8080/ value = https://127.0.0.1:8080 => https://127.0.0.1:8080/", () => {
     assert.equal(L.replacePathLastSlash({ value:'https://127.0.0.1:8080/', includeSlash: true }), 'https://127.0.0.1:8080/')
