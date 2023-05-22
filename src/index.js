@@ -22,7 +22,7 @@ const trim = value => {
 }
 
 function buildRandomCode(length,
-  characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789') {
+    characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789') {
   let result = ''
   const charactersLength = characters.length
   for (let i = 0; i < length; i++) {
@@ -33,7 +33,7 @@ function buildRandomCode(length,
 
 function buildRandomSymbolCode(length) {
   return buildRandomCode(length,
-    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~!@#$%^&*.,')
+      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~!@#$%^&*.,')
 }
 
 function buildRandomNumber(length) {
@@ -84,7 +84,7 @@ const arrayDeleteByIndex = (array, index) => {
 const dateFormatter = (date, format) => {
   if (/(y+)/.test(format)) {
     format = format.replace(RegExp.$1,
-      (date.getFullYear() + '').substr(4 - RegExp.$1.length))
+        (date.getFullYear() + '').substr(4 - RegExp.$1.length))
   }
   var o = {
     'M+': date.getMonth() + 1,
@@ -97,7 +97,7 @@ const dateFormatter = (date, format) => {
     if (new RegExp(`(${ k })`).test(format)) {
       var str = o[k] + ''
       format = format.replace(RegExp.$1,
-        (RegExp.$1.length === 1) ? str : padLeftZero(str))
+          (RegExp.$1.length === 1) ? str : padLeftZero(str))
     }
   }
   return format
@@ -138,19 +138,26 @@ const lc = {
     randomNumber(length) {
       return buildRandomNumber(length)
     },
+    randomNumberValue(maxValue = 10, minValue = 0) {
+      if (minValue >= maxValue) {
+        return 0
+      }
+      const number = Math.ceil(Math.random() * maxValue) + minValue;
+      return number > maxValue ? number - minValue : number;
+    },
     /**
      * 替换末尾为0的方法，
      * 如：0.01000可替换成0.01
      */
     replaceNumWith0AtEnd(num, keepDecimalPlaces = 2,
-      thousandCharacter = false) {
+        thousandCharacter = false) {
       const s = `${ num }`.replace(
-        new RegExp(`(\\d+\\.\\d{${keepDecimalPlaces}}(\\d*[1-9])*)(0*)`),
-        '$1')
+          new RegExp(`(\\d+\\.\\d{${keepDecimalPlaces}}(\\d*[1-9])*)(0*)`),
+          '$1')
       if (thousandCharacter) {
         const split = s.split('.')
         return `${ (split[0]).replace(/\d{1,3}(?=(\d{3})+$)/g,
-          '$&,') }.${ (split[1] || '').padEnd(keepDecimalPlaces, '0') }`
+            '$&,') }.${ (split[1] || '').padEnd(keepDecimalPlaces, '0') }`
       }
       return s
     },
@@ -160,27 +167,27 @@ const lc = {
       thousandCharacter = false
     }) {
       return lc.L.replaceNumWith0AtEnd(num, keepDecimalPlaces,
-        thousandCharacter)
+          thousandCharacter)
     },
     getCurrentDay: (arg = {}) => arg.format ? dateFormatter(
-      new Date(new Date().toLocaleDateString()), arg.format) : parseInt(
-      (new Date(new Date().toLocaleDateString()) / 1000) + ''),
+        new Date(new Date().toLocaleDateString()), arg.format) : parseInt(
+        (new Date(new Date().toLocaleDateString()) / 1000) + ''),
     now: (arg = {}) => arg.format ? dateFormatter(new Date(), arg.format)
-      : parseInt((new Date() / 1000) + ''),
+        : parseInt((new Date() / 1000) + ''),
     toReplace: (str, regex, callback) => {
       str = trim(str)
       return str === '' ? str : str.replace(regex, callback)
     },
     toDBField: str => {
       return lc.L.toReplace(str, /[A-Z]/g,
-        (word) => '_' + ((word + '').toLowerCase()))
+          (word) => '_' + ((word + '').toLowerCase()))
     },
     uuid: () => {
       return uuidv1()
     },
     toLittleHump: str => {
       return lc.L.toReplace(str, /\_[a-z]/g,
-        (word) => word.substring(1).toUpperCase())
+          (word) => word.substring(1).toUpperCase())
     },
     toFirstWordUpperCase: str => {
       str = trim(str)
@@ -199,7 +206,7 @@ const lc = {
     },
     isPromise(val) {
       lc.L.isObject(val) && lc.L.isFunction(val.then) && lc.L.isFunction(
-        val.catch)
+          val.catch)
     },
     isNullOrEmpty: value => {
       return lc.L.isNull(value) || typeMapNullOrEmpty[typeof value](value)
@@ -211,7 +218,7 @@ const lc = {
     },
     range(size, callback) {
       if (/^[1-9]\d{0,9}$/.test(size) && typeof callback === 'function') {
-        [...Array(size).keys()].map(callback)
+        [ ...Array(size).keys() ].map(callback)
       }
     },
     md5(value) {
@@ -404,13 +411,13 @@ const lc = {
     return ts
   },
   doConsoleConfig({ padEndNumber = 40, address = process.cwd() + '/' } = {}) {
-    const getStackTrace = function() {
+    const getStackTrace = function () {
       const obj = {}
       Error.captureStackTrace(obj, getStackTrace)
       return obj.stack
     }
     const log = console.log
-    console.log = function() {
+    console.log = function () {
       const stack = getStackTrace() || ''
       const matchResult = stack.match(/\(.*?\)/g) || []
       const line = matchResult[1] || ''

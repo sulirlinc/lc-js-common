@@ -173,6 +173,9 @@ describe('公共库测试', () => {
   it("23.随机数", () => {
     console.log(L.randomNumber(16))
   })
+  it("23.2.随机指定大小的数", () => {
+    console.log(L.randomNumberValue(20))
+  })
   it("24.AES加密", () => {
     const key = "bUuL9inPj2isXZMS"//L.randomCode(16);
     console.log(key)
