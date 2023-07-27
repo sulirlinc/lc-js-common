@@ -258,5 +258,34 @@ jwt.sign(payload, secretOrPrivateKey
     doConsoleConfig()
     console.log("hello world.","4466","7788","15458")
   })
+  
+  it("39.includeSlash = false value = https://127.0.0.1:8080/ => https://127.0.0.1:8080 value = https://127.0.0.1:8080 => https://127.0.0.1:8080 includeSlash = true value = https://127.0.0.1:8080/ => https://127.0.0.1:8080/ value = https://127.0.0.1:8080 => https://127.0.0.1:8080/", () => {
+    assert.equal(L.replacePathLastSlash({ value:'https://127.0.0.1:8080/', includeSlash: true }), 'https://127.0.0.1:8080/')
+    assert.equal(L.replacePathLastSlash({ value:'https://127.0.0.1:8080/', includeSlash: false }), 'https://127.0.0.1:8080')
+    assert.equal(L.replacePathLastSlash({ value:'https://127.0.0.1:8080', includeSlash: true }), 'https://127.0.0.1:8080/')
+    assert.equal(L.removeLashSlash('https://127.0.0.1:8080/'), 'https://127.0.0.1:8080')
+    assert.equal(L.removeLashSlash('https://127.0.0.1:8080'), 'https://127.0.0.1:8080')
+    assert.equal(L.addLashSlash('https://127.0.0.1:8080'), 'https://127.0.0.1:8080/')
+    assert.equal(L.addLashSlash('https://127.0.0.1:8080/'), 'https://127.0.0.1:8080/')
+  })
+  it("40.includeSlash = false value = /abc/efg => abc/efg value = abc/efg => abc/efg includeSlash = true value = /abc/efg => /abc/efg value = abc/efg => /abc/efg", () => {
+    assert.equal(L.replacePathFirstSlash({ value:'/abc/efg', includeSlash: true }), '/abc/efg')
+    assert.equal(L.replacePathFirstSlash({ value:'abc/efg', includeSlash: true }), '/abc/efg')
+    assert.equal(L.replacePathFirstSlash({ value:'abc/efg', includeSlash: false }), 'abc/efg')
+    assert.equal(L.replacePathFirstSlash({ value:'/abc/efg', includeSlash: false }), 'abc/efg')
+    assert.equal(L.removeFirstSlash('/abc/efg'), 'abc/efg')
+    assert.equal(L.removeFirstSlash('abc/efg'), 'abc/efg')
+    assert.equal(L.addFirstSlash('/abc/efg'), '/abc/efg')
+    assert.equal(L.addFirstSlash('abc/efg'), '/abc/efg')
+  })
+  it("41.防抖", () => {
+    const obj = {}
+
+    for (let i = 0; i < 10; i++) {
+      L.useDebounce(obj,function (){
+        console.log(i)
+      })
+    }
+  })
 ```
 更多事例与覆盖请查看单元测试``test\test.js``

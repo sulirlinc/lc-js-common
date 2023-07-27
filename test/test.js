@@ -277,5 +277,13 @@ describe('公共库测试', () => {
     assert.equal(L.addFirstSlash('/abc/efg'), '/abc/efg')
     assert.equal(L.addFirstSlash('abc/efg'), '/abc/efg')
   })
+  it("41.防抖", () => {
+    const obj = {}
 
+    for (let i = 0; i < 10; i++) {
+      L.useDebounce(obj,function (){
+        console.log(i)
+      })
+    }
+  })
 })

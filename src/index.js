@@ -106,6 +106,17 @@ const dateFormatter = (date, format) => {
 const lc = {
   TimeUnit: require('timeunit'),
   L: {
+    useDebounce(obj, fun, options) {
+      if (!obj || typeof fun !== 'function') {
+        return;
+      }
+      const { debounceTime = 0 } = obj;
+      const { interval = 500, param } = options || {};
+      if (new Date().getTime() - debounceTime > interval) {
+        obj.debounceTime = new Date().getTime();
+        fun(param);
+      }
+    },
     dateFormatter,
     timer,
     trim,
@@ -438,7 +449,6 @@ const lc = {
           + line.replace("(", "").replace(")", "") + "]"*/
       log.apply(console, arguments)
     }
-
   }
 }
 
